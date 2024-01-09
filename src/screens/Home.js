@@ -1,75 +1,83 @@
-import React from 'react';
-import Hero from "../images/Hero.png";
-import Programme from "../images/Programme.png";
-import '../styles/Home.css';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { useNavigate } from 'react-router-dom';
 
-const data = [
-  {
-    image: Programme,
-    title: 'ISATE Council Meeting 2',
-    description: 'Another description for item 2.',
-  },
-  {
-    image: Programme,
-    title: 'ISATE Council Meeting 3',
-    description: 'Description for item 3.',
-  },
-  {
-    image: Programme,
-    title: 'ISATE Council Meeting 4',
-    description: 'Description for item 4.',
-  },
-  {
-    image: Programme,
-    title: 'ISATE Council Meeting 5',
-    description: 'Description for item 5.',
-  },
-  
-  
-  // Add more objects as needed
-];
+const Home = ({ title, description, event_posted }) => {
+  // Function to limit words in a string
+  const limitWords = (str, limit) => {
+    const words = str.split(' ');
+    return words.slice(0, limit).join(' ') + (words.length > limit ? '...' : '');
+  };
 
-const Home = () => {
+  const limitedDescription = limitWords(description, 10);
+  return (
+    <div
+      className='flex-1 block m-2 max-w-sm p-4 md:p-6 bg-white border border-gray-200 rounded-md shadow cursor-pointer transition duration-300 ease-in-out transform hover:scale-105'
+    >
+      <h5 className='mb-2 text-xl md:text-2xl font-bold tracking-tight text-black'>{title}</h5>
+      <p className='font-normal text-sm md:text-base text-gray-500 mb-4'>{limitedDescription}</p>
+      <div className='bg-teal-700 text-white rounded-full py-1 px-2 absolute bottom-2 right-2 h-6 md:h-8'>
+        <p className='text-xs md:text-sm'>
+          {event_posted}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const EventsList = () => {
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/events');
+        setEvents(response.data);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+
+    fetchEvents();
+  }, []); 
+  
+  const rows = [];
+  const cardsPerRow = 4;
+
+  for (let i = 0; i < events.length; i += cardsPerRow) {
+    const row = events.slice(i, i + cardsPerRow);
+    rows.push(
+      <div key={i / cardsPerRow} className='sm:flex sm:flex-wrap justify-center'>
+        {row.map((events, index) => (
+          <Home
+            key={index}
+            title={events.title}
+            description={events.description}
+            event_posted={events.time_start}
+          />
+        ))}
+      </div>
+    );
+  }
+  const navigate = useNavigate();
+  const handleAddEventClick = () => {
+    navigate('/addprogram'); // Redirect to the specified route
+  };
   return (
     <>
-      <div className="relative">
-        <img
-          className="w-full h-auto brightness-50"
-          src={Hero}
-          alt="Hero"
-        />
-       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white xl:text-3xl md:text-xl" id="title-font" >
-  INTERNATIONAL LEARNING FESTIVAL
-</div>
-
-
-      </div>
-
-      <div className="flex flex-wrap justify-center">
-        <div className="w-65 mt-8">
-          <div className='flex flex-wrap '  style={{ marginLeft: '200px' }}>
-            {data.map((item, index) => (
-              <div key={index} className="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/4 my-3 mx-3">
-                <div className="bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
-                  <img className="rounded-t-lg object-cover w-full h-28" src={item.image} alt="" />
-                  <div className="p-3">
-                    <h5 className="text-lg font-bold text-black">{item.title}</h5>
-                    <p className="font-normal text-gray-700 text-sm">{item.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      {/* Add Event Button */}
+      <Link to="/add-event">
+        <button className="bg-green-500 text-white px-4 py-2 rounded-md m-2"
+        onClick={handleAddEventClick}>
+          Add Event
+          
+        </button>
+      </Link>
+      {/* Events List */}
+      {rows}
     </>
   );
 };
 
-export default Home;
-
-
-
-
-
-
+export default EventsList;
