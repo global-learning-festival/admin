@@ -27,7 +27,8 @@ class App extends React.Component {
               <Route path="/" element={<Home />} />
               <Route path="/viewimportantinfo" element={<ImportantInfo />} />s
               <Route path="/addimportantinfo" element={<AddImportantInfo />} />
-              <Route path="/editimportantinfo" element={<EditImportantInfo />} /> 
+              <Route path="/editimportantinfo" element={<EditImportantInfo />} />
+              <Route path="/editimportantinfo/:infoid" element={<EditImportantInfo />} />  
               <Route path="/addmanager" element={<AddManager />} />   
               <Route path="/login" element={<LogIn />} /> 
             </Routes>
