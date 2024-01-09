@@ -1,17 +1,31 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const AddImportantInformation = () => {
   const [title, setTitle] = useState('');
   const [subtitle, setSubtitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const handleAdd = () => {
-    // Here you can implement the logic to save the new information
-    console.log('Added Information:', { title, subtitle, description });
-    // Reset the form fields after adding
-    setTitle('');
-    setSubtitle('');
-    setDescription('');
+  const handleAdd = async () => {
+    try {
+      // Send a POST request to your API endpoint to add information
+      const response = await axios.post('http://localhost:5000/importantInformation', {
+        title,
+        subtitle,
+        description,
+      });
+
+      // Handle the response as needed
+      console.log('Added Information:', response.data);
+
+      // Reset the form fields after adding
+      setTitle('');
+      setSubtitle('');
+      setDescription('');
+    } catch (error) {
+      console.error('Error adding information:', error);
+      // Handle the error as needed
+    }
   };
 
   return (
