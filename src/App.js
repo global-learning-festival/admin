@@ -14,6 +14,7 @@ import EditImportantInfo from './screens/EditImportantinfo';
 import AddManager from './screens/AddManager';
 import LogIn from './screens/Login';
 import ImportantInfo from './screens/ViewImportantInfo';
+import AdminMap from './screens/mapedit';
 import { AuthContextProvider } from './context/AuthContext';
 
 
@@ -31,6 +32,7 @@ class App extends React.Component {
               <Route path="/editimportantinfo/:infoid" element={<EditImportantInfo />} />  
               <Route path="/addmanager" element={<AddManager />} />   
               <Route path="/login" element={<LogIn />} /> 
+              <Route path="/mapediting" element={<AdminMap />} /> 
             </Routes>
           </AuthContextProvider>
       </div>
