@@ -10,7 +10,7 @@ import conferenceMarker from '../assets/marker/conference.png';
 import toiletMarker from '../assets/marker/toilet.png';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
-
+import '../styles/map.css'
 import Redmarker from '../assets/marker.png';
 import '../styles/marker.css';
 
@@ -140,6 +140,12 @@ const AdminMap = () => {
                   <h3 id={`Refill${markerlocation.mapid}`}>{markerlocation.location_name}</h3>
                   <img src={Image} alt="Myself" />
                   <p>{markerlocation.description}</p>
+                  <button
+                        id="RefillButton"
+                       
+                      >
+                        {`Edit marker`}
+                      </button>
                 </div>
               </Popup>
             </Marker>
