@@ -1,15 +1,32 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const AdminLoginScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // Here you can implement the login logic
-    console.log('Logging in with:', { username, password });
-    // Reset the form fields after login
-    setUsername('');
-    setPassword('');
+  const handleLogin = async () => {
+    try {
+      // Send a POST request to your authentication endpoint
+      const response = await axios.post('http://localhost:5000/login', {
+        username,
+        password,
+      });
+
+      // Assuming your server responds with a token upon successful login
+      const token = response.data.token;
+
+      // Here you can handle the token, for example, store it in local storage
+      localStorage.setItem('token', token);
+
+      console.log('Logged in successfully');
+
+      // Reset the form fields after login
+      setUsername('');
+      setPassword('');
+    } catch (error) {
+      console.error('Error logging in:', error);
+    }
   };
 
   return (

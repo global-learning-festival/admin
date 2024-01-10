@@ -12,6 +12,11 @@ import Home from './screens/Home'
 import AddImportantInfo from './screens/Addimportantinfo';
 import EditImportantInfo from './screens/EditImportantinfo';
 import AddManager from './screens/AddManager';
+<<<<<<< Updated upstream
+=======
+import AddProgram from './screens/AddProgram';
+import EditProgram from './screens/EditProgram';
+>>>>>>> Stashed changes
 import LogIn from './screens/Login';
 import ImportantInfo from './screens/ViewImportantInfo';
 import AdminMap from './screens/mapedit';
@@ -28,6 +33,12 @@ class App extends React.Component {
               <Route path="/" element={<Home />} />
               <Route path="/viewimportantinfo" element={<ImportantInfo />} />s
               <Route path="/addimportantinfo" element={<AddImportantInfo />} />
+<<<<<<< Updated upstream
+=======
+              <Route path="/addprogram" element={<AddProgram />} />
+              <Route path="/editprogram" element={<EditProgram/>} />
+              <Route path="/editprogram/:eventid" element={<EditProgram/>} />
+>>>>>>> Stashed changes
               <Route path="/editimportantinfo" element={<EditImportantInfo />} />
               <Route path="/editimportantinfo/:infoid" element={<EditImportantInfo />} />  
               <Route path="/addmanager" element={<AddManager />} />   
