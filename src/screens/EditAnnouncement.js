@@ -1,14 +1,16 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const EditAnnouncement = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [announcementData, setAnnouncementData] = useState([])
   const { announcementid } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
+
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/announcements/${announcementid}`);
@@ -29,6 +31,7 @@ const EditAnnouncement = () => {
         description,
       });
       console.log('API Response:', response.data);
+      return navigate('/viewannouncements')
     } catch (error) {
       console.error('Error updating information:', error);
     }
@@ -38,6 +41,8 @@ const EditAnnouncement = () => {
     try {
       const response = await axios.delete(`http://localhost:5000/announcements/${announcementid}`);
       console.log('API Response:', response.data);
+      return navigate('/viewannouncements')
+
     } catch (error) {
       console.error('Error deleting information:', error);
     }
