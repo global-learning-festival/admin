@@ -49,7 +49,6 @@ const Navbar = () => {
       <ul className='hidden md:flex mr-20 pt-3'>
         
         <li className='p-4'><Link to="/" className='no-underline text-white' onClick={handleNav}>Home</Link></li>
-          <li className='p-4'><Link to="/addannouncements" className='no-underline text-white' onClick={handleNav}>Announcements</Link></li>
           <li className='p-4'><Link to="/events" className='no-underline text-white' onClick={handleNav}>Events</Link></li>
           <li className='p-4'><Link to="/viewannouncements" className='no-underline text-white' onClick={handleNav}>Announcements</Link></li>
           <li className='p-4 '><Link to="/userlist" className='no-underline text-white' onClick={handleNav}>User List</Link></li>
