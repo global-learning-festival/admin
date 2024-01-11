@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 const AddImportantInformation = () => {
   const [title, setTitle] = useState('');
@@ -18,15 +20,25 @@ const AddImportantInformation = () => {
       // Handle the response as needed
       console.log('Added Information:', response.data);
 
+      // Show success notification
+      NotificationManager.success('Important information added successfully');
+
       // Reset the form fields after adding
       setTitle('');
       setSubtitle('');
       setDescription('');
+
+      // Auto-refresh the page after a short delay (you can adjust the delay as needed)
+      setTimeout(() => {
+        window.location.replace('/viewimportantinfo');
+      }, 600);
     } catch (error) {
       console.error('Error adding information:', error);
-      // Handle the error as needed
+      // Show error notification
+      NotificationManager.error('Error adding important information');
     }
   };
+    
 
   return (
     <div className="container mx-auto p-4">
@@ -80,7 +92,9 @@ const AddImportantInformation = () => {
       >
         Add Information
       </button>
+      <NotificationContainer style={{ bottom: '0', right: '0', left: '0', top: 'auto' }} />
     </div>
+    
   );
 };
 
