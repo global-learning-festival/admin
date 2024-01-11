@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-<<<<<<< Updated upstream
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import { useNavigate } from 'react-router-dom';
-=======
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 const Home = ({ title, description, event_posted, eventid }) => {
   const navigate = useNavigate();
->>>>>>> Stashed changes
 
   const limitWords = (str, limit) => {
     const words = str.split(' ');
@@ -21,7 +17,6 @@ const Home = ({ title, description, event_posted, eventid }) => {
     navigate(`/editprogram/${eventid}`);
     console.log('eventIdCheck', eventid);
   };
-  
 
   return (
     <div
@@ -69,28 +64,12 @@ const EventsList = () => {
             title={event.title}
             description={event.description}
             event_posted={event.time_start}
-            eventid={event.eventid} // Pass eventid to Home component
+            eventid={event.eventid}
           />
         ))}
       </div>
     );
   }
-<<<<<<< Updated upstream
-  const navigate = useNavigate();
-  const handleAddEventClick = () => {
-    navigate('/addprogram'); // Redirect to the specified route
-  };
-  return (
-    <>
-      {/* Add Event Button */}
-      <Link to="/add-event">
-        <button className="bg-green-500 text-white px-4 py-2 rounded-md m-2"
-        onClick={handleAddEventClick}>
-          Add Event
-          
-        </button>
-      </Link>
-=======
 
   const handleAddEventClick = () => {
     navigate('/addprogram');
@@ -99,10 +78,11 @@ const EventsList = () => {
   return (
     <>
       {/* Add Event Button */}
-      <button onClick={handleAddEventClick} className="bg-green-500 text-white px-4 py-2 rounded-md m-2">
-        Add Event
-      </button>
->>>>>>> Stashed changes
+      <Link to="/addprogram">
+        <button className="bg-green-500 text-white px-4 py-2 rounded-md m-2">
+          Add Event
+        </button>
+      </Link>
       {/* Events List */}
       {rows}
     </>
