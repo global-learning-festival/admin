@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import { useNavigate } from 'react-router-dom';
 
 const Home = ({ title, description, event_posted }) => {
   // Function to limit words in a string
@@ -60,16 +59,13 @@ const EventsList = () => {
       </div>
     );
   }
-  const navigate = useNavigate();
-  const handleAddEventClick = () => {
-    navigate('/addprogram'); // Redirect to the specified route
-  };
+  
   return (
     <>
       {/* Add Event Button */}
-      <Link to="/add-event">
+      <Link to="/addprogram">
         <button className="bg-green-500 text-white px-4 py-2 rounded-md m-2"
-        onClick={handleAddEventClick}>
+        >
           Add Event
           
         </button>

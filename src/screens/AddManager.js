@@ -1,15 +1,29 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const AddManagerScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [type, setType] = useState('');
 
-  const handleAddManager = () => {
-    // Here you can implement the logic to add a new manager
-    console.log('Added Manager:', { username, password });
-    // Reset the form fields after adding
-    setUsername('');
-    setPassword('');
+  const handleAddManager = async () => {
+    try {
+      // Send a POST request to the API to add a new manager
+      const response = await axios.post('http://localhost:5000/adduser', {
+        username,
+        password,
+        type,
+      });
+
+      console.log('Added Manager:', response.data);
+
+      // Reset the form fields after adding
+      setUsername('');
+      setPassword('');
+      setType('');
+    } catch (error) {
+      console.error('Error adding manager:', error);
+    }
   };
 
   return (
@@ -44,6 +58,23 @@ const AddManagerScreen = () => {
           onChange={(e) => setPassword(e.target.value)}
           className="mt-1 p-2 border border-gray-300 rounded-md w-full"
         />
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="type" className="block text-sm font-medium text-gray-600">
+          Type
+        </label>
+        <select
+          id="type"
+          name="type"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+        >
+          <option value="" disabled>Select a role</option>
+          <option value="event-manager">Event Manager</option>
+          <option value="admin">Admin</option>
+        </select>
       </div>
 
       <button
