@@ -15,6 +15,9 @@ import AddManager from './screens/AddManager';
 import LogIn from './screens/Login';
 import ImportantInfo from './screens/ViewImportantInfo';
 import AdminMap from './screens/mapedit';
+import ViewAnnouncements from './screens/ViewAnnouncement'
+import EditAnnouncement from './screens/EditAnnouncement'
+import AddAnnouncement from './screens/AddAnnouncement'
 import { AuthContextProvider } from './context/AuthContext';
 
 
@@ -31,6 +34,9 @@ class App extends React.Component {
               <Route path="/editimportantinfo" element={<EditImportantInfo />} />
               <Route path="/editimportantinfo/:infoid" element={<EditImportantInfo />} />  
               <Route path="/addmanager" element={<AddManager />} />   
+              <Route path="/viewannouncements" element={<ViewAnnouncements/>}/>
+              <Route path="/editannouncement/:announcementid" element={<EditAnnouncement/>}/>
+              <Route path="/addannouncement" element={<AddAnnouncement/>}/>
               <Route path="/login" element={<LogIn />} /> 
               <Route path="/mapediting" element={<AdminMap />} /> 
             </Routes>
