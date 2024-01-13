@@ -7,6 +7,7 @@ import AddImportantInfo from './screens/Addimportantinfo';
 import EditImportantInfo from './screens/EditImportantinfo';
 import AddManager from './screens/AddManager';
 import AddProgram from './screens/AddProgram';
+import EditProgram from './screens/EditProgram';
 import LogIn from './screens/Login';
 import ImportantInfo from './screens/ViewImportantInfo';
 import AdminMap from './screens/mapedit';
@@ -29,9 +30,10 @@ class App extends React.Component {
             <Route path="/viewimportantinfo" element={<ImportantInfo />} />
             <Route path="/addimportantinfo" element={<AddImportantInfo />} />
             <Route path="/addprogram" element={<AddProgram />} />
-               <Route path="/viewannouncements" element={<ViewAnnouncements/>}/>
-              <Route path="/editannouncement/:announcementid" element={<EditAnnouncement/>}/>
-              <Route path="/addannouncement" element={<AddAnnouncement/>}/>
+            <Route path="/editprogram/:eventid" element={<EditProgram />} />
+            <Route path="/viewannouncements" element={<ViewAnnouncements />} />
+            <Route path="/editannouncement/:announcementid" element={<EditAnnouncement />} />
+            <Route path="/addannouncement" element={<AddAnnouncement />} />
             {/* Include the following lines only if you decide to keep the EditProgram functionality */}
             {/* <Route path="/editprogram" element={<EditProgram />} /> */}
             {/* <Route path="/editprogram/:eventid" element={<EditProgram />} /> */}
