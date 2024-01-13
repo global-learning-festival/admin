@@ -71,9 +71,6 @@ const EventsList = () => {
     );
   }
 
-  const handleAddEventClick = () => {
-    navigate('/addprogram');
-  };
 
   return (
     <>
