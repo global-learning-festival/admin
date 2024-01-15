@@ -52,7 +52,7 @@ const Navbar = () => {
           <li className='p-4'><Link to="/events" className='no-underline text-white' onClick={handleNav}>Events</Link></li>
           <li className='p-4'><Link to="/viewannouncements" className='no-underline text-white' onClick={handleNav}>Announcements</Link></li>
           <li className='p-4 '><Link to="/userlist" className='no-underline text-white' onClick={handleNav}>User List</Link></li>
-          <li className='p-4'><Link to="/mapediting" className='no-underline text-white' onClick={handleNav}>Map Editing</Link></li>
+          <li className='p-4'><Link to="/mapadding" className='no-underline text-white' onClick={handleNav}>Map Editing</Link></li>
           <li className='p-4'><Link to="/viewimportantinfo" className='no-underline text-white' onClick={handleNav}>Important Info</Link></li>
       </ul>
     </div>

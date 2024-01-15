@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 const EditImportantInformation = () => {
   const [title, setTitle] = useState('');
@@ -31,19 +33,38 @@ const EditImportantInformation = () => {
         description,
       });
       console.log('API Response:', response.data);
+
+      // Show success notification
+      NotificationManager.success('Information updated successfully');
     } catch (error) {
       console.error('Error updating information:', error);
+      // Show error notification
+      
+      NotificationManager.error('Error updating information');
+      
     }
+    setTimeout(() => {
+        window.location.replace('/viewimportantinfo');
+      }, 900);
   };
 
   const handleDelete = async () => {
     try {
       const response = await axios.delete(`http://localhost:5000/delete/${infoid}`);
       console.log('API Response:', response.data);
+
+      // Show success notification
+      NotificationManager.success('Information deleted successfully');
     } catch (error) {
       console.error('Error deleting information:', error);
+      // Show error notification
+      NotificationManager.error('Error deleting information');
     }
+    setTimeout(() => {
+      window.location.replace('/viewimportantinfo');
+    }, 900);
   };
+  
 
   return (
     <div>
@@ -111,6 +132,7 @@ const EditImportantInformation = () => {
           </button>
         </div>
       ))}
+      <NotificationContainer  />
     </div>
   );
 };
