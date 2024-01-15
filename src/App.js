@@ -10,13 +10,13 @@ import AddProgram from './screens/AddProgram';
 import EditProgram from './screens/EditProgram';
 import LogIn from './screens/Login';
 import ImportantInfo from './screens/ViewImportantInfo';
-import AdminMap from './screens/mapedit';
+import AdminMap from './screens/mapadd';
 import ViewAnnouncements from './screens/ViewAnnouncement'
 import EditAnnouncement from './screens/EditAnnouncement'
 import AddAnnouncement from './screens/AddAnnouncement'
 import { AuthContextProvider } from './context/AuthContext';
 import UserList from './screens/UserList';
-
+import AdminMapedit from './screens/mapedit';
 class App extends React.Component {
   render() {
     return (
@@ -41,7 +41,8 @@ class App extends React.Component {
             <Route path="/editimportantinfo/:infoid" element={<EditImportantInfo />} />
             <Route path="/addmanager" element={<AddManager />} />
             <Route path="/login" element={<LogIn />} />
-            <Route path="/mapediting" element={<AdminMap />} />
+            <Route path="/mapadding" element={<AdminMap />} />
+            <Route path="/mapediting/:markerid" element={<AdminMapedit />} />
             <Route path="/userlist" element={<UserList />} />
           </Routes>
         </AuthContextProvider>

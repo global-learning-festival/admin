@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Popup, Marker, useMapEvents } from 'react-leaflet';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import L from 'leaflet';
+import L, { marker } from 'leaflet';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import 'leaflet-routing-machine';
 import Image from '../assets/school.jpeg';
@@ -13,21 +13,26 @@ import toiletMarker from '../assets/marker/toilet.png';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
 import '../styles/map.css';
-import Redmarker from '../assets/marker.png';
 import '../styles/marker.css';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const AdminMap = () => {
+const AdminMapedit = () => {
   const position = [1.310411032362568, 103.77767848691333];
-  const [selectedPosition, setSelectedPosition] = useState(null);
+
   const [markers, setMarkers] = useState([]);
   const [location_name, setLocation] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
+  const { markerid } = useParams();
+  console.log( "useparams", markerid)
+  const navigate = useNavigate(); // Add this line
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/markers');
+        console.log("markerid", markerid)
+        const response = await axios.get(`http://localhost:5000/markerindiv/${markerid}`);
         setMarkers(response.data);
         console.log('Refill data:', response.data);
       } catch (error) {
@@ -36,54 +41,44 @@ const AdminMap = () => {
     };
 
     fetchData();
-  }, []);
+  }, [markerid]);
 
   const mapRef = useRef();
 
-  const handleMapClick = (e) => {
-    setSelectedPosition(e.latlng);
-  };
+ 
 
-  const markericon = L.icon({
-    iconUrl: Redmarker,
-    iconSize: [19, 35],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -32],
-  });
-
-  const RightClickDisplay = () => {
-    const map = useMapEvents({
-      contextmenu: (e) => {
-        console.log('coords', e.latlng);
-        const display = document.getElementById('coordinates-display');
-        display.innerHTML = `Right click coordinates:<br>Latitude and Longitude:(${e.latlng.lat.toFixed(6)},${e.latlng.lng.toFixed(6)})`;
-        setSelectedPosition(e.latlng);
-      },
-    });
-    return null;
-  };
-
-  const Addlocation = async () => {
+  const updatelocation = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/marker', {
+        
+      const response = await axios.put(`http://localhost:5000/marker/${markerid}`, {
         location_name,
         description,
-        category,
-        coordinates: `${selectedPosition.lat},${selectedPosition.lng}`, // Convert to string
+        category
       });
 
-      console.log('Added Information:', response.data);
+      console.log('Marker updated:', response.data);
 
-      toast.success('Information added successfully', { position: toast.POSITION.TOP_RIGHT});
+      toast.success('Marker updated successfully', { position: toast.POSITION.TOP_RIGHT});
 
       setLocation('');
       setDescription('');
       setCategory('');
-      setSelectedPosition(null);
+  
+      window.location.reload();
     } catch (error) {
-      console.error('Error adding information:', error);
+      console.error('Error updating marker:', error);
 
-      toast.error('Error adding information. Please try again.', { position: toast.POSITION.TOP_RIGHT });
+      toast.error('Error updating marker. Please try again.', { position: toast.POSITION.TOP_RIGHT });
+    }
+  };
+
+  const deleteMarker = async () => {
+    try {
+      const response = await axios.delete(`http://localhost:5000/delmarker/${markerid}`);
+      console.log('API Response:', response.data);
+      navigate(`/mapadding`); 
+    } catch (error) {
+      console.error('Error deleting information:', error);
     }
   };
 
@@ -125,10 +120,10 @@ const AdminMap = () => {
             const coordinates1 = markerlocation.coordinates.split(',').map((coord) => parseFloat(coord));
             console.log('Refill Location:', coordinates1);
             return (
-              <Marker key={markerlocation.mapid} position={coordinates1} icon={customIcon}>
+              <Marker key={markerlocation.markerid} position={coordinates1} icon={customIcon}>
                 <Popup>
-                  <div id={`divRefill${markerlocation.mapid}`}>
-                    <h3 id={`Refill${markerlocation.mapid}`}>{markerlocation.location_name}</h3>
+                  <div id={`divRefill${markerlocation.markerid}`}>
+                    <h3 id={`Refill${markerlocation.markerid}`}>{markerlocation.location_name}</h3>
                     <img src={Image} alt="Myself" />
                     <p>{markerlocation.description}</p>
                     <button id="RefillButton">{`Edit marker`}</button>
@@ -140,94 +135,80 @@ const AdminMap = () => {
         </MapContainer>
       </div>
       <div id="form" style={{ width: '40%', float: 'right', marginLeft: '10px' }}>
-        <div className="container mx-auto p-4">
-          <h1 className="text-2xl font-bold mb-4">Add Marker</h1>
+      {markers.map((markerlist) => (
+       
+       <div className="container mx-auto p-4">
+         <h1 className="text-2xl font-bold mb-4">Edit Marker</h1>
 
-          <div className="mb-4">
-            <label htmlFor="Location_name" className="block text-sm font-medium text-gray-600">
-              Location Name
-            </label>
-            <input
-              type="text"
-              id="Location_name"
-              name="Location_name"
-              value={location_name}
-              onChange={(e) => setLocation(e.target.value)}
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-            />
-          </div>
+         <div className="mb-4">
+           <label htmlFor="Location_name" className="block text-sm font-medium text-gray-600">
+             Location Name
+           </label>
+           <input
+             type="text"
+             id="Location_name"
+             name="Location_name"
+             value={location_name}
+             placeholder={markerlist.location_name}
+             onChange={(e) => setLocation(e.target.value)}
+             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+           />
+         </div>
 
-          <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-600">
-              Description
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              rows="4"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-            ></textarea>
-          </div>
+         <div className="mb-4">
+           <label htmlFor="description" className="block text-sm font-medium text-gray-600">
+             Description
+           </label>
+           <textarea
+             id="description"
+             name="description"
+             rows="4"
+             value={description}
+             placeholder={markerlist.description}
+             onChange={(e) => setDescription(e.target.value)}
+             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+           ></textarea>
+         </div>
 
-          <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-600">
-              Choose Location
-            </label>
 
-            <MapContainer
-              center={[1.3521, 103.8198]}
-              zoom={13}
-              style={{ height: '500px', width: '100%' }}
-              onClick={handleMapClick}
-            >
-              <TileLayer
-                url="https://www.onemap.gov.sg/maps/tiles/Default/{z}/{x}/{y}.png"
-                attribution='Map data © <a href="https://www.onemap.sg/" target="_blank">OneMap</a>'
-              />
+         <div className="mb-4">
+           <label htmlFor="location" className="block text-sm font-medium text-gray-600">
+             category
+           </label>
+           <select
+             id="location"
+             name="location"
+             value={category}
+             placeholder={markerlist.category}
+             onChange={(e) => setCategory(e.target.value)}
+             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+           >
+             <option value="">Select a location</option>
+             <option value="water">Water Refill Station</option>
+             <option value="register">Registration Counter</option>
+             <option value="conference">Conference Room</option>
+             <option value="toilet">Toilet</option>
+           </select>
+         </div>
 
-              {selectedPosition && (
-                <Marker position={selectedPosition} icon={markericon}>
-                  <Popup>Selected Location</Popup>
-                </Marker>
-              )}
-              <RightClickDisplay />
-            </MapContainer>
-            <div id="coordinates-display" className="coordinates-display">
-              Right click on the map to see the coordinates
-            </div>
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="location" className="block text-sm font-medium text-gray-600">
-              category
-            </label>
-            <select
-              id="location"
-              name="location"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-            >
-              <option value="">Select a location</option>
-              <option value="water">Water Refill Station</option>
-              <option value="register">Registration Counter</option>
-              <option value="conference">Conference Room</option>
-              <option value="toilet">Toilet</option>
-            </select>
-          </div>
-
-          <button
-            onClick={Addlocation}
-            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-          >
-            Add Information
-          </button>
-        </div>
-      </div>
+         <button
+           onClick={updatelocation}
+           className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+         >
+          Update Marker
+         </button>
+         <button
+           onClick={deleteMarker}
+           className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+         >
+          Delete Marker
+         </button>
+       </div>
+    
+      ))}
+       </div>
     </div>
   );
 };
 
-export default AdminMap;
+export default AdminMapedit;
