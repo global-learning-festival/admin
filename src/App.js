@@ -1,4 +1,5 @@
 import React from 'react';
+import {Cloudinary} from "@cloudinary/url-gen";
 
 import 'bootstrap/dist/css/bootstrap.css';
 import { Routes, Route } from 'react-router-dom';
@@ -19,7 +20,6 @@ import ViewAnnouncements from './screens/ViewAnnouncement'
 import EditAnnouncement from './screens/EditAnnouncement'
 import AddAnnouncement from './screens/AddAnnouncement'
 import { AuthContextProvider } from './context/AuthContext';
-
 
 class App extends React.Component {
   render() {
