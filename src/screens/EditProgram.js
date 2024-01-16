@@ -3,8 +3,12 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
+import CloudinaryUploadWidget from "../components/CloudinaryUpload";
+import { Cloudinary } from "@cloudinary/url-gen";
+import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
 
 const EditProgram = () => {
+  
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('');
   const [image_banner, setImageBanner] = useState('');
@@ -17,10 +21,22 @@ const EditProgram = () => {
   const [survey_link, setSurveyLink] = useState('');
   const [programData, setProgramData] = useState([]);
   const { eventid } = useParams();
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
+  const [publicId, setPublicId] = useState('');
+  const [cloudName] = useState('dxkozpx6g');
+  const [uploadPreset] = useState('jcck4okm');
+
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName
+    }
+  });
+  const uwConfig = {
+    cloudName,
+    uploadPreset,
+    cropping: true,
+    multiple: false,
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,7 +61,7 @@ const EditProgram = () => {
 
     fetchData();
   }, [eventid]);
-
+  const myImage = cld.image(publicId);
   const handleEdit = async (e) => {
     e.preventDefault();
     try {
@@ -97,7 +113,19 @@ const EditProgram = () => {
     <div>
       {programData.map((programData) => (
         <div className="container mx-auto p-4" key={programData.id}>
-          <h1 className="text-2xl font-bold mb-4">Edit Program</h1>
+          
+          <div style={{ marginBottom: "20px" }}>
+        <p className="block text-sm font-medium text-gray-600">Upload Image</p>
+        <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
+      </div>
+
+      <div style={{ width: "400px", marginBottom: "20px" }}>
+        <AdvancedImage
+          style={{ maxWidth: "100%" }}
+          cldImg={cld.image(publicId || programData.image_banner)}
+          plugins={[responsive(), placeholder()]}
+        />
+      </div>
           <form onSubmit={handleEdit}>
             {/* Title */}
             <div className="mb-4">
@@ -114,18 +142,7 @@ const EditProgram = () => {
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full"
               />
             </div>
-            <div className="mb-4">
-              <label htmlFor="image" className="block text-sm font-medium text-gray-600">
-                Upload Image
-              </label>
-              <input
-                type="file"
-                id="image"
-                className="mt-1 p-2 w-full border rounded-md"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-            </div>
+          
             <div className="mb-4">
               <label htmlFor="eventTime" className="block text-sm font-medium text-gray-600">
                 Event Start

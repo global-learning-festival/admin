@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
-
+import CloudinaryUploadWidget from "../components/CloudinaryUpload";
+import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
+import { Cloudinary } from "@cloudinary/url-gen";
 
 
 const AddProgramPage = () => {
@@ -14,20 +16,33 @@ const AddProgramPage = () => {
   const [keynote_speaker, setKeynoteSpeaker] = useState('');
   const [description, setDescription] = useState('');
   const [survey_link, setSurveyLink] = useState('');
-  
+  const [publicId, setPublicId] = useState('');
+  const [cloudName] = useState('dxkozpx6g');
+  const [uploadPreset] = useState('jcck4okm');
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName
+    }
+  });
+  const uwConfig = {
+    cloudName,
+    uploadPreset,
+    cropping: true,
+    multiple: false,
   };
 
+  const handleImageUpload = (publicId) => {
+    setPublicId(publicId);
+  };
+  const myImage = cld.image(publicId);
   const handleAddEvent = async () => {
     try {
       const response = await axios.post('http://localhost:5000/events', {
         title,
-        image_banner,
-        startTimestamp: time_start,
-      endTimestamp: time_end,
+        image_banner: publicId,
+        time_start,
+        time_end,
         location,
         keynote_speaker,
         description,
@@ -35,6 +50,7 @@ const AddProgramPage = () => {
       });
 
       console.log('API Response:', response.data);
+      
 
       // Show success notification
       NotificationManager.success('Important information added successfully');
@@ -54,7 +70,17 @@ const AddProgramPage = () => {
 
   return (
     <div className="max-w-2xl mx-auto mt-8 p-4">
+
       <h1 className="text-2xl font-bold mb-4">Add Program</h1>
+      <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
+            <div style={{ width: "400px" }}>
+                
+                <AdvancedImage
+                style={{ maxWidth: "100%" }}
+                cldImg={myImage}
+                plugins={[responsive(), placeholder()]}
+                />
+            </div>
       <form>
         <div className="mb-4">
           <label htmlFor="title" className="block text-sm font-medium text-gray-600">
@@ -69,22 +95,12 @@ const AddProgramPage = () => {
           />
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="image" className="block text-sm font-medium text-gray-600">
-            Upload Image
-          </label>
-          <input
-            type="file"
-            id="image"
-            className="mt-1 p-2 w-full border rounded-md"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </div>
+        
         <div className="mb-4">
           <label htmlFor="timestamp" className="block text-sm font-medium text-gray-600">
             Choose Date and Time: Event Start
           </label>
+          
           <input
             type="datetime-local"
             id="startTimestamp"
@@ -95,6 +111,7 @@ const AddProgramPage = () => {
 
 
           />
+          
         </div>
 
 
@@ -113,19 +130,6 @@ const AddProgramPage = () => {
 
           />
         </div>
-
-        {/* <div className="mb-4">
-              <label htmlFor="eventDate" className="block text-sm font-medium text-gray-600">
-                Event Date
-              </label>
-              <input
-                type="date"
-                id="eventDate"
-                className="mt-1 p-2 w-full border rounded-md"
-                value={eventDate}
-                onChange={(e) => setEventDate(e.target.value)}
-              />
-      </div>*/}
         <div className="mb-4">
           <label htmlFor="location" className="block text-sm font-medium text-gray-600">
             Location
