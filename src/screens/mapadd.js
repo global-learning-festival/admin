@@ -16,6 +16,9 @@ import '../styles/map.css';
 import Redmarker from '../assets/marker.png';
 import '../styles/marker.css';
 import { useNavigate } from 'react-router-dom';
+import CloudinaryUploadWidget from "../components/CloudinaryUpload";
+import { Cloudinary } from "@cloudinary/url-gen";
+import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
 
 const AdminMap = () => {
   const position = [1.310411032362568, 103.77767848691333];
@@ -25,6 +28,35 @@ const AdminMap = () => {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const navigate = useNavigate();
+  const [cloudName] = useState("dxkozpx6g");
+  const [uploadPreset] = useState("jcck4okm");
+  const [publicId, setPublicId] = useState("");
+
+
+
+  const [uwConfig] = useState({
+    cloudName,
+    uploadPreset,
+    cropping: true, //add a cropping step
+    // showAdvancedOptions: true,  //add advanced options (public_id and tag)
+    // sources: [ "local", "url"], // restrict the upload sources to URL and local files
+    multiple: false,  //restrict upload to a single file
+    // folder: "user_images", //upload files to the specified folder
+    // tags: ["users", "profile"], //add the given tags to the uploaded files
+    // context: {alt: "user_uploaded"}, //add the given context data to the uploaded files
+    // clientAllowedFormats: ["images"], //restrict uploading to image files only
+    // maxImageFileSize: 2000000,  //restrict file size to less than 2MB
+    // maxImageWidth: 500, //Scales the image down to a width of 2000 pixels before uploading
+    // theme: "purple", //change to a purple theme
+  });
+
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName
+    }
+  });
+
+  const myImage = cld.image(publicId);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,6 +109,7 @@ const AdminMap = () => {
         description,
         category,
         coordinates: `${selectedPosition.lat},${selectedPosition.lng}`, // Convert to string
+        publicId
       });
 
       console.log('Added marker:', response.data);
@@ -137,7 +170,14 @@ const AdminMap = () => {
                 <Popup>
                   <div id={`divRefill${markerlocation.mapid}`}>
                     <h3 id={`Refill${markerlocation.mapid}`}>{markerlocation.location_name}</h3>
-                    <img src={Image} alt="Myself" />
+                  <div style={{ width: "300px" }}>
+                
+                <AdvancedImage
+                style={{ maxWidth: "100%" }}
+                cldImg={cld.image(publicId || markerlocation.image)}
+                plugins={[responsive(), placeholder()]}
+                />
+            </div>
                     <p>{markerlocation.description}</p>
                     <button id="RefillButton" onClick={()=>handleEditInformationClick(markerlocation.mapid)}>{`Edit marker`}</button>
                   </div>
@@ -147,6 +187,7 @@ const AdminMap = () => {
           })}
         </MapContainer>
       </div>
+      
       <div id="form" style={{ width: '40%', float: 'right', marginLeft: '10px' }}>
         <div className="container mx-auto p-4">
           <h1 className="text-2xl font-bold mb-4">Add Marker</h1>
@@ -178,6 +219,20 @@ const AdminMap = () => {
               className="mt-1 p-2 border border-gray-300 rounded-md w-full"
             ></textarea>
           </div>
+          <div className="mb-4">
+        <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
+          Cloudinary Upload
+        </label>
+        <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
+        <div style={{ width: "800px" }}>
+                
+                <AdvancedImage
+                style={{ maxWidth: "100%" }}
+                cldImg={myImage}
+                plugins={[responsive(), placeholder()]}
+                />
+            </div>
+      </div>
 
           <div className="mb-4">
             <label htmlFor="description" className="block text-sm font-medium text-gray-600">
@@ -206,6 +261,7 @@ const AdminMap = () => {
               Right click on the map to see the coordinates
             </div>
           </div>
+          
 
           <div className="mb-4">
             <label htmlFor="location" className="block text-sm font-medium text-gray-600">
@@ -225,6 +281,7 @@ const AdminMap = () => {
               <option value="toilet">Toilet</option>
             </select>
           </div>
+          
 
           <button
             onClick={Addlocation}
@@ -234,6 +291,7 @@ const AdminMap = () => {
           </button>
         </div>
       </div>
+      
     </div>
   );
 };
