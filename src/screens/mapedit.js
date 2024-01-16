@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Popup, Marker, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Popup, Marker } from 'react-leaflet';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import L, { marker } from 'leaflet';
+import L from 'leaflet';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import 'leaflet-routing-machine';
 import Image from '../assets/school.jpeg';
@@ -16,6 +16,8 @@ import '../styles/map.css';
 import '../styles/marker.css';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { Cloudinary } from "@cloudinary/url-gen";
+import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
 
 const AdminMapedit = () => {
   const position = [1.310411032362568, 103.77767848691333];
@@ -27,6 +29,8 @@ const AdminMapedit = () => {
   const { markerid } = useParams();
   console.log( "useparams", markerid)
   const navigate = useNavigate(); // Add this line
+  const [publicId, setPublicId] = useState("");
+  const [cloudName] = useState("dxkozpx6g");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +49,13 @@ const AdminMapedit = () => {
 
   const mapRef = useRef();
 
- 
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName
+    }
+  });
+
+  const myImage = cld.image(publicId);
 
   const updatelocation = async () => {
     try {
@@ -124,7 +134,11 @@ const AdminMapedit = () => {
                 <Popup>
                   <div id={`divRefill${markerlocation.markerid}`}>
                     <h3 id={`Refill${markerlocation.markerid}`}>{markerlocation.location_name}</h3>
-                    <img src={Image} alt="Myself" />
+                    <AdvancedImage
+                style={{ maxWidth: "100%" }}
+                cldImg={cld.image(publicId || markerlocation.image)}
+                plugins={[responsive(), placeholder()]}
+                />
                     <p>{markerlocation.description}</p>
                     <button id="RefillButton">{`Edit marker`}</button>
                   </div>
@@ -168,6 +182,17 @@ const AdminMapedit = () => {
              onChange={(e) => setDescription(e.target.value)}
              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
            ></textarea>
+         </div>
+        
+                  <div className="mb-4">
+           <label htmlFor="description" className="block text-sm font-medium text-gray-600">
+             Image 
+           </label>
+           <AdvancedImage
+                style={{ maxWidth: "100%" }}
+                cldImg={cld.image(publicId || markerlist.image)}
+                plugins={[responsive(), placeholder()]}
+                />
          </div>
 
 
