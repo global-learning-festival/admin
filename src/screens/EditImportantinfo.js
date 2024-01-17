@@ -15,7 +15,19 @@ const EditImportantInformation = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/info/${infoid}`);
-        setInfodata(response.data);
+
+        // Check if the response data is an array and set infodata accordingly
+        if (Array.isArray(response.data)) {
+          setInfodata(response.data);
+        } else {
+          // If the response data is not an array, wrap it in an array
+          setInfodata([response.data]);
+        }
+
+        const {title, subtitle, description } = response.data[0]; // Assuming the data is an array
+        setTitle(title);
+        setSubtitle(subtitle);
+        setDescription(description);
       } catch (error) {
         console.error('Error fetching information:', error);
       }
@@ -23,6 +35,7 @@ const EditImportantInformation = () => {
 
     fetchData();
   }, [infoid]);
+
 
   const handleEdit = async (e) => {
     e.preventDefault();
@@ -39,13 +52,13 @@ const EditImportantInformation = () => {
     } catch (error) {
       console.error('Error updating information:', error);
       // Show error notification
-      
+
       NotificationManager.error('Error updating information');
-      
+
     }
     setTimeout(() => {
-        window.location.replace('/viewimportantinfo');
-      }, 900);
+      window.location.replace('/viewimportantinfo');
+    }, 900);
   };
 
   const handleDelete = async () => {
@@ -64,11 +77,11 @@ const EditImportantInformation = () => {
       window.location.replace('/viewimportantinfo');
     }, 900);
   };
-  
+
 
   return (
     <div>
-      {infodata.map((infolist) => (
+      {infodata && infodata.map((infolist, index) => (
         <div className="container mx-auto p-4" key={infolist.id}>
           <h1 className="text-2xl font-bold mb-4">Edit Important Information</h1>
           <form onSubmit={handleEdit}>
@@ -80,7 +93,6 @@ const EditImportantInformation = () => {
                 type="text"
                 id="title"
                 name="title"
-                placeholder={infolist.title}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full"
@@ -95,7 +107,6 @@ const EditImportantInformation = () => {
                 type="text"
                 id="subtitle"
                 name="subtitle"
-                placeholder={infolist.subtitle}
                 value={subtitle}
                 onChange={(e) => setSubtitle(e.target.value)}
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full"
@@ -110,7 +121,6 @@ const EditImportantInformation = () => {
                 id="description"
                 name="description"
                 rows="4"
-                placeholder={infolist.description}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full"
@@ -132,7 +142,7 @@ const EditImportantInformation = () => {
           </button>
         </div>
       ))}
-      <NotificationContainer  />
+      <NotificationContainer />
     </div>
   );
 };
