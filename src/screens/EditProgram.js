@@ -8,7 +8,7 @@ import { Cloudinary } from "@cloudinary/url-gen";
 import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
 
 const EditProgram = () => {
-  
+
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('');
   const [image_banner, setImageBanner] = useState('');
@@ -41,9 +41,17 @@ const EditProgram = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/events/${eventid}`);
-        const data = response.data;
-        console.log('Response Data:', response.data);
-        setProgramData(data);
+  
+        // Check if the response data is an array and set programData accordingly
+        if (Array.isArray(response.data)) {
+          setProgramData(response.data);
+        } else {
+          // If the response data is not an array, wrap it in an array
+          setProgramData([response.data]);
+        }
+  
+        const data = response.data[0];
+        console.log('Response Data:', data);
         setTitle(data.title);
         setImageBanner(data.image_banner);
         setTimeStart(data.time_start);
@@ -54,20 +62,19 @@ const EditProgram = () => {
         setSurveyLink(data.survey_link);
       } catch (error) {
         console.error('Error fetching program information:', error);
-      } finally {
-        setLoading(false);
       }
     };
-
+  
     fetchData();
   }, [eventid]);
+  
   const myImage = cld.image(publicId);
   const handleEdit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.put(`http://localhost:5000/events/${eventid}`, {
         title,
-        image_banner,
+        publicId,
         time_start,
         time_end,
         location,
@@ -104,29 +111,16 @@ const EditProgram = () => {
       NotificationManager.error('Error deleting information');
     }
     setTimeout(() => {
-      window.location.replace('/events');
+      window.location.replace('/');
     }, 900);
   };
 
 
   return (
     <div>
-      {programData.map((programData) => (
+      {programData &&programData.map((programData, index) => (
         <div className="container mx-auto p-4" key={programData.id}>
-          
-          <div style={{ marginBottom: "20px" }}>
-        <p className="block text-sm font-medium text-gray-600">Upload Image</p>
-        <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
-      </div>
-
-      <div style={{ width: "400px", marginBottom: "20px" }}>
-        <AdvancedImage
-          style={{ maxWidth: "100%" }}
-          cldImg={cld.image(publicId || programData.image_banner)}
-          plugins={[responsive(), placeholder()]}
-        />
-      </div>
-          <form onSubmit={handleEdit}>
+          <div id="form" onSubmit={handleEdit}>
             {/* Title */}
             <div className="mb-4">
               <label htmlFor="title" className="block text-sm font-medium text-gray-600">
@@ -142,33 +136,51 @@ const EditProgram = () => {
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full"
               />
             </div>
-          
-            <div className="mb-4">
-              <label htmlFor="eventTime" className="block text-sm font-medium text-gray-600">
-                Event Start
+            <div>
+              <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
+                Cloudinary Upload
               </label>
+              <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
+              <div style={{ width: "400px" }}>
+                <AdvancedImage
+                  style={{ maxWidth: "100%" }}
+                  cldImg={cld.image(publicId || programData.image_banner)}
+                  plugins={[responsive(), placeholder()]}
+                />
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="timestamp" className="block text-sm font-medium text-gray-600">
+                Choose Date and Time: Event Start
+              </label>
+
               <input
-                type="text"
-                id="eventTime"
+                type="datetime-local"
+                id="startTimestamp"
+                name="startTimestamp"
                 className="mt-1 p-2 w-full border rounded-md"
+                value={time_start || programData.time_start}  
                 placeholder={programData.time_start}
-                value={time_start}
                 onChange={(e) => setTimeStart(e.target.value)}
               />
+
             </div>
 
 
             <div className="mb-4">
-              <label htmlFor="eventTime" className="block text-sm font-medium text-gray-600">
-                Event End
+              <label htmlFor="timestamp" className="block text-sm font-medium text-gray-600">
+                Choose Date and Time: Event End
               </label>
               <input
-                type="text"
-                id="eventTime"
+                type="datetime-local"
+                id="endTimestamp"
+                name="endTimestamp"
                 className="mt-1 p-2 w-full border rounded-md"
-                placeholder={programData.time_end}
-                value={time_end}
+                value={time_end || programData.time_end}
                 onChange={(e) => setTimeEnd(e.target.value)}
+
+
               />
             </div>
 
@@ -196,7 +208,7 @@ const EditProgram = () => {
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
               >
-          
+
               </input>
             </div>
             <div className="mb-4">
@@ -236,7 +248,7 @@ const EditProgram = () => {
                 type="text"
                 id="surveyLink"
                 className="mt-1 p-2 w-full border rounded-md"
-                placeholder={programData.setSurveyLink}
+                placeholder={programData.survey_link}
                 value={survey_link}
                 onChange={(e) => setSurveyLink(e.target.value)}
               />
@@ -246,12 +258,12 @@ const EditProgram = () => {
 
 
             <button
-              type="submit"
+            onClick={handleEdit}
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
             >
               Edit Program
             </button>
-          </form>
+          </div>
           <button
             onClick={handleDelete}
             className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
