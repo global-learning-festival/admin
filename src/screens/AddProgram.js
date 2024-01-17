@@ -72,17 +72,9 @@ const AddProgramPage = () => {
     <div className="max-w-2xl mx-auto mt-8 p-4">
 
       <h1 className="text-2xl font-bold mb-4">Add Program</h1>
-      <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
-            <div style={{ width: "400px" }}>
-                
-                <AdvancedImage
-                style={{ maxWidth: "100%" }}
-                cldImg={myImage}
-                plugins={[responsive(), placeholder()]}
-                />
-            </div>
-      <form>
-        <div className="mb-4">
+            
+      
+        <div id="form" className="mb-4">
           <label htmlFor="title" className="block text-sm font-medium text-gray-600">
             Title
           </label>
@@ -94,7 +86,20 @@ const AddProgramPage = () => {
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
-
+        <div className="mb-4">
+        <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
+          Cloudinary Upload
+        </label>
+        <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
+        <div style={{ width: "400px" }}>
+                
+                <AdvancedImage
+                style={{ maxWidth: "100%" }}
+                cldImg={myImage}
+                plugins={[responsive(), placeholder()]}
+                />
+            </div>
+      </div>
         
         <div className="mb-4">
           <label htmlFor="timestamp" className="block text-sm font-medium text-gray-600">
@@ -191,7 +196,7 @@ const AddProgramPage = () => {
         >
           Add Event
         </button>
-      </form>
+      
     </div>
   );
 };
