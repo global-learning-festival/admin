@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const ImportantInfoCard = ({ infoid, title, subtitle, onClick  }) => {
   return (
     <div
-      className='flex-1 block m-2 p-4 bg-white border border-gray-200 rounded-md shadow cursor-pointer transition duration-300 ease-in-out transform hover:scale-105 relative'
+      className='flex-1 block m-2 max-w-sm p-4 md:p-6 bg-white border border-gray-200 rounded-md shadow cursor-pointer transition duration-300 ease-in-out transform hover:scale-105'
       onClick={onClick}
     >
       <h5 className='mb-2 text-2xl font-bold tracking-tight text-black'>{title}</h5>
