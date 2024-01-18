@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/users'); // Adjust the endpoint accordingly
+        const response = await axios.get('http://localhost:5000/users');
         setUsers(response.data);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -16,34 +18,67 @@ const UserList = () => {
     };
 
     fetchUsers();
-  }, []); 
+  }, []);
+
+  const toggleUserSelection = (userId) => {
+    setSelectedUsers((prevSelectedUsers) => {
+      const isSelected = prevSelectedUsers.includes(userId);
+      if (isSelected) {
+        return prevSelectedUsers.filter((id) => id !== userId);
+      } else {
+        return [...prevSelectedUsers, userId];
+      }
+    });
+  };
+
+  const UserTableRow = ({ userId, username, type }) => (
+    <tr>
+      <td className="p-2 text-center">
+        <input
+          type="checkbox"
+          checked={selectedUsers.includes(userId)}
+          onChange={() => toggleUserSelection(userId)}
+        />
+      </td>
+      <td className="p-2 text-center">{username}</td>
+      <td className="p-2 text-center">{type}</td>
+    </tr>
+  );
 
   return (
-    <>
+    <div className="flex flex-col items-center mt-8">
       {/* Add Manager Button */}
       <Link to="/addmanager">
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-md m-2">
+        <button className="bg-blue-500 text-white px-4 py-2 rounded-md my-2">
           Add Manager
         </button>
       </Link>
-      {/* User List */}
-      <div className='flex flex-wrap justify-center'>
-        {users.map((user, index) => (
-          <UserCard key={index} username={user.username} email={user.email} role={user.role} />
-        ))}
-      </div>
-    </>
-  );
-};
-
-const UserCard = ({ username, email, role }) => {
-  return (
-    <div className='flex-1 block m-2 max-w-sm p-4 md:p-6 bg-white border border-gray-200 rounded-md shadow cursor-pointer transition duration-300 ease-in-out transform hover:scale-105'>
-      <h5 className='mb-2 text-xl md:text-2xl font-bold tracking-tight text-black'>{username}</h5>
-      <p className='font-normal text-sm md:text-base text-gray-500 mb-4'>{email}</p>
-      <div className='bg-teal-700 text-white rounded-full py-1 px-2 absolute bottom-2 right-2 h-6 md:h-8'>
-        <p className='text-xs md:text-sm'>{role}</p>
-      </div>
+      {/* User Table */}
+      <table className="w-full max-w-md bg-white border border-gray-300 shadow-md mt-4">
+        <thead>
+          <tr>
+            <th className="p-2 text-center">
+              <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Select</span>
+            </th>
+            <th className="p-2 text-center">
+              <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Username</span>
+            </th>
+            <th className="p-2 text-center">
+              <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Type</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user, index) => (
+            <UserTableRow
+              key={index}
+              userId={user.userId}
+              username={user.username}
+              type={user.type}
+            />
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
