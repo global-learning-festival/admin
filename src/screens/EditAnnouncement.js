@@ -12,6 +12,8 @@ const EditAnnouncement = () => {
   const [uploadPreset] = useState("jcck4okm");
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [event, setEvent] = useState('');
+  const [eventlist, setEventlist] = useState([]);
   const [announcementData, setAnnouncementData] = useState([])
   const { announcementid } = useParams();
   const navigate = useNavigate();
@@ -36,12 +38,27 @@ const EditAnnouncement = () => {
     // maxImageWidth: 500, //Scales the image down to a width of 2000 pixels before uploading
     // theme: "purple", //change to a purple theme
   });
+  
   useEffect(() => {
 
     const fetchData = async () => {
       try {
+        const response1 = await axios.get('http://localhost:5000/eventsannouncement');
+        setEventlist(response1.data);
         const response = await axios.get(`http://localhost:5000/announcements/${announcementid}`);
         setAnnouncementData(response.data)
+        // Check if the response data is an array and set infodata accordingly
+        if (Array.isArray(response.data)) {
+          setAnnouncementData(response.data);
+        } else {
+          // If the response data is not an array, wrap it in an array
+          setAnnouncementData([response.data]);
+        }
+
+        const {title, description, eventid } = response.data[0]; // Assuming the data is an array
+        setTitle(title);
+        setDescription(description);
+        setEvent(eventid)
         console.log(response.data)
     } catch (error) {
         console.error('Error fetching information:', error);
@@ -57,7 +74,8 @@ const EditAnnouncement = () => {
       const response = await axios.put(`http://localhost:5000/announcements/${announcementid}`, {
         title,
         description,
-        publicId
+        publicId,
+        event
       });
       console.log('API Response:', response.data);
       return navigate('/viewannouncements')
@@ -100,7 +118,6 @@ const EditAnnouncement = () => {
                 type="text"
                 id="title"
                 name="title"
-                placeholder={announcementlist.title}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full"
@@ -115,13 +132,27 @@ const EditAnnouncement = () => {
                 id="description"
                 name="description"
                 rows="4"
-                placeholder={announcementlist.description}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full"
               ></textarea>
             </div>
-
+            <label htmlFor="eventlist" className="block text-sm font-medium text-gray-600">
+            Event list
+          </label>
+          <select
+            id="eventlist"
+            name="eventlist"
+            value={event}
+            onChange={(e) => setEvent(e.target.value)}
+            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+          >
+            {eventlist.map((eventlisting, index) => (
+              <option key={index} value={eventlisting.eventid}>
+                {eventlisting.title}
+              </option>
+            ))}
+          </select>
             <button
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
