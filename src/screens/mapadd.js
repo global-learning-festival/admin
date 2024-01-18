@@ -131,7 +131,7 @@ const AdminMap = () => {
   return (
     <div className="admin-map-container">
       <div id="markerlist" style={{ width: '50%', float: 'left', marginRight: '10px', marginTop: '2%' }}>
-        <MapContainer center={position} zoom={16} style={{ width: '100%', height: '800px' }} ref={mapRef}>
+        <MapContainer center={position} zoom={16} style={{ width: '100%', height: '800px', marginLeft: "60px" }} ref={mapRef}>
           <TileLayer
             url="https://www.onemap.gov.sg/maps/tiles/Default/{z}/{x}/{y}.png"
             attribution='Map data © <a href="https://www.onemap.sg/" target="_blank">OneMap</a>'
@@ -173,7 +173,7 @@ const AdminMap = () => {
                   <div style={{ width: "300px" }}>
                 
                 <AdvancedImage
-                style={{ maxWidth: "100%" }}
+                style={{ maxWidth: "100%",  }}
                 cldImg={cld.image(publicId || markerlocation.image)}
                 plugins={[responsive(), placeholder()]}
                 />
@@ -219,20 +219,7 @@ const AdminMap = () => {
               className="mt-1 p-2 border border-gray-300 rounded-md w-full"
             ></textarea>
           </div>
-          <div className="mb-4">
-        <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
-          Cloudinary Upload
-        </label>
-        <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
-        <div style={{ width: "800px" }}>
-                
-                <AdvancedImage
-                style={{ maxWidth: "100%" }}
-                cldImg={myImage}
-                plugins={[responsive(), placeholder()]}
-                />
-            </div>
-      </div>
+          
 
           <div className="mb-4">
             <label htmlFor="description" className="block text-sm font-medium text-gray-600">
@@ -240,9 +227,9 @@ const AdminMap = () => {
             </label>
 
             <MapContainer
-              center={[1.3521, 103.8198]}
-              zoom={13}
-              style={{ height: '500px', width: '100%' }}
+              center={position} 
+              zoom={16}
+              style={{ height: '300px', width: '100%' }}
               onClick={handleMapClick}
             >
               <TileLayer
@@ -281,14 +268,33 @@ const AdminMap = () => {
               <option value="toilet">Toilet</option>
             </select>
           </div>
+          <div className="mb-4">
+        <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
+          Cloudinary Upload
+        </label>
+        <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
+        
+        <div style={{ width: "200px" , marginRight: '10px' }}>
+        <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
+          Image Preview
+        </label>
+                <AdvancedImage
+                style={{ maxWidth: "100%" }}
+                cldImg={myImage}
+                plugins={[responsive(), placeholder()]}
+                />
+            </div>
+      </div>
           
-
-          <button
-            onClick={Addlocation}
-            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-          >
-            Add Marker
-          </button>
+      <div className="flex justify-center">
+      <button
+        onClick={Addlocation}
+        className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+        style={{ width: "23%" }}
+      >
+        Add Marker
+      </button>
+    </div>
         </div>
       </div>
       
