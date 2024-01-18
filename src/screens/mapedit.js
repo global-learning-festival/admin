@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Popup, Marker } from 'react-leaflet';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import L from 'leaflet';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import 'leaflet-routing-machine';
-import Image from '../assets/school.jpeg';
 import waterMarker from '../assets/marker/water.png';
 import registerMarker from '../assets/marker/register.png';
 import conferenceMarker from '../assets/marker/conference.png';
@@ -37,7 +34,25 @@ const AdminMapedit = () => {
       try {
         console.log("markerid", markerid)
         const response = await axios.get(`http://localhost:5000/markerindiv/${markerid}`);
-        setMarkers(response.data);
+        
+
+        if (Array.isArray(response.data)) {
+          setMarkers(response.data);
+        } else {
+          // If the response data is not an array, wrap it in an array
+          setMarkers([response.data]);
+        }
+        
+        const {location_name, description, category } = response.data[0]; // Assuming the data is an array
+        setLocation(location_name);
+      setDescription(description);
+      setCategory(category);
+
+
+
+
+
+        
         console.log('Refill data:', response.data);
       } catch (error) {
         console.error('Error fetching refill locations:', error);
@@ -48,6 +63,8 @@ const AdminMapedit = () => {
   }, [markerid]);
 
   const mapRef = useRef();
+
+    
 
   const cld = new Cloudinary({
     cloud: {
@@ -63,22 +80,22 @@ const AdminMapedit = () => {
       const response = await axios.put(`http://localhost:5000/marker/${markerid}`, {
         location_name,
         description,
-        category
+        category 
       });
 
+     
+
+    
       console.log('Marker updated:', response.data);
 
-      toast.success('Marker updated successfully', { position: toast.POSITION.TOP_RIGHT});
 
-      setLocation('');
-      setDescription('');
-      setCategory('');
+      
   
-      window.location.reload();
+      window.location.reload()
     } catch (error) {
       console.error('Error updating marker:', error);
 
-      toast.error('Error updating marker. Please try again.', { position: toast.POSITION.TOP_RIGHT });
+    
     }
   };
 
@@ -131,7 +148,7 @@ const AdminMapedit = () => {
             console.log('Refill Location:', coordinates1);
             return (
               <Marker key={markerlocation.markerid} position={coordinates1} icon={customIcon}>
-                <Popup>
+                <Popup >
                   <div id={`divRefill${markerlocation.markerid}`}>
                     <h3 id={`Refill${markerlocation.markerid}`}>{markerlocation.location_name}</h3>
                     <AdvancedImage
@@ -149,89 +166,85 @@ const AdminMapedit = () => {
         </MapContainer>
       </div>
       <div id="form" style={{ width: '40%', float: 'right', marginLeft: '10px' }}>
-      {markers.map((markerlist) => (
-       
-       <div className="container mx-auto p-4">
-         <h1 className="text-2xl font-bold mb-4">Edit Marker</h1>
+  {markers.map((markerlist) => (
+    <div className="container mx-auto p-4" key={markerlist.id}>
+      <h1 className="text-2xl font-bold mb-4">Edit Marker</h1>
 
-         <div className="mb-4">
-           <label htmlFor="Location_name" className="block text-sm font-medium text-gray-600">
-             Location Name
-           </label>
-           <input
-             type="text"
-             id="Location_name"
-             name="Location_name"
-             value={location_name}
-             placeholder={markerlist.location_name}
-             onChange={(e) => setLocation(e.target.value)}
-             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-           />
-         </div>
+      <div className="mb-4">
+  <label htmlFor="Location_name" className="block text-sm font-medium text-gray-600">
+    Location Name
+  </label>
+  <input
+    type="text"
+    id="Location_name"
+    name="Location_name"
+    value={location_name }
+    onChange={(e) => setLocation(e.target.value)}
+    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+  />
+</div>
 
-         <div className="mb-4">
-           <label htmlFor="description" className="block text-sm font-medium text-gray-600">
-             Description
-           </label>
-           <textarea
-             id="description"
-             name="description"
-             rows="4"
-             value={description}
-             placeholder={markerlist.description}
-             onChange={(e) => setDescription(e.target.value)}
-             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-           ></textarea>
-         </div>
-        
-                  <div className="mb-4">
-           <label htmlFor="description" className="block text-sm font-medium text-gray-600">
-             Image 
-           </label>
-           <AdvancedImage
-                style={{ maxWidth: "100%" }}
-                cldImg={cld.image(publicId || markerlist.image)}
-                plugins={[responsive(), placeholder()]}
-                />
-         </div>
+      <div className="mb-4">
+        <label htmlFor="description" className="block text-sm font-medium text-gray-600">
+          Description
+        </label>
+        <textarea
+          id="description"
+          name="description"
+          rows="4"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+        ></textarea>
+      </div>
 
+      <div className="mb-4">
+      <div style={{ width: "200px" , marginRight: '10px' }}>
+        <label htmlFor="description" className="block text-sm font-medium text-gray-600">
+          Image 
+        </label>
+        <AdvancedImage
+          style={{ maxWidth: "100%" }}
+          cldImg={cld.image(publicId || markerlist.image)}
+          plugins={[responsive(), placeholder()]}
+        />
+      </div>
+      </div>
 
-         <div className="mb-4">
-           <label htmlFor="location" className="block text-sm font-medium text-gray-600">
-             category
-           </label>
-           <select
-             id="location"
-             name="location"
-             value={category}
-             placeholder={markerlist.category}
-             onChange={(e) => setCategory(e.target.value)}
-             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-           >
-             <option value="">Select a location</option>
-             <option value="water">Water Refill Station</option>
-             <option value="register">Registration Counter</option>
-             <option value="conference">Conference Room</option>
-             <option value="toilet">Toilet</option>
-           </select>
-         </div>
+      <div className="mb-4">
+        <label htmlFor="location" className="block text-sm font-medium text-gray-600">
+          Category
+        </label>
+        <select
+          id="location"
+          name="location"
+          value={category }
+              onChange={(e) => setCategory(e.target.value)}
+          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+        >
+          <option value="">Select a location</option>
+          <option value="water">Water Refill Station</option>
+          <option value="register">Registration Counter</option>
+          <option value="conference">Conference Room</option>
+          <option value="toilet">Toilet</option>
+        </select>
+      </div>
 
-         <button
-           onClick={updatelocation}
-           className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-         >
-          Update Marker
-         </button>
-         <button
-           onClick={deleteMarker}
-           className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-         >
-          Delete Marker
-         </button>
-       </div>
-    
-      ))}
-       </div>
+      <button
+        onClick={updatelocation}
+        className="bg-blue-500 text-white px-4 py-2 rounded-md "
+      >
+        Update Marker
+      </button>
+      <button
+        onClick={deleteMarker}
+        className="bg-red-500 text-white px-4 py-2 rounded-md "
+      >
+        Delete Marker
+      </button>
+    </div>
+  ))}
+</div>
     </div>
   );
 };
