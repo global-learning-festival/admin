@@ -3,6 +3,9 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
+import CloudinaryUploadWidget from "../components/CloudinaryUpload";
+import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
+import { Cloudinary } from "@cloudinary/url-gen";
 
 const EditImportantInformation = () => {
   const [title, setTitle] = useState('');
@@ -10,7 +13,26 @@ const EditImportantInformation = () => {
   const [description, setDescription] = useState('');
   const [infodata, setInfodata] = useState([]);
   const { infoid } = useParams();
+  const [publicId, setPublicId] = useState('');
+  const [cloudName] = useState('dxkozpx6g');
+  const [uploadPreset] = useState('jcck4okm');
 
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName
+    }
+  });
+  const uwConfig = {
+    cloudName,
+    uploadPreset,
+    cropping: true,
+    multiple: false,
+  };
+
+  const handleImageUpload = (publicId) => {
+    setPublicId(publicId);
+  };
+  const myImage = cld.image(publicId);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -24,10 +46,11 @@ const EditImportantInformation = () => {
           setInfodata([response.data]);
         }
 
-        const {title, subtitle, description } = response.data[0]; // Assuming the data is an array
+        const {title, subtitle, description ,image} = response.data[0]; // Assuming the data is an array
         setTitle(title);
         setSubtitle(subtitle);
         setDescription(description);
+        setPublicId(image)
       } catch (error) {
         console.error('Error fetching information:', error);
       }
@@ -44,6 +67,7 @@ const EditImportantInformation = () => {
         title,
         subtitle,
         description,
+        publicId,
       });
       console.log('API Response:', response.data);
 
@@ -126,7 +150,19 @@ const EditImportantInformation = () => {
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full"
               ></textarea>
             </div>
-
+            <div>
+              <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
+                Cloudinary Upload
+              </label>
+              <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
+              <div style={{ width: "400px" }}>
+                <AdvancedImage
+                  style={{ maxWidth: "100%" }}
+                  cldImg={cld.image(publicId )}
+                  plugins={[responsive(), placeholder()]}
+                />
+              </div>
+            </div>
             <button
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"

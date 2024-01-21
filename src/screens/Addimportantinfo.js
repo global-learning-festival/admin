@@ -2,18 +2,41 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
+import CloudinaryUploadWidget from "../components/CloudinaryUpload";
+import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
+import { Cloudinary } from "@cloudinary/url-gen";
 
 const AddImportantInformation = () => {
   const [title, setTitle] = useState('');
   const [subtitle, setSubtitle] = useState('');
   const [description, setDescription] = useState('');
+  const [publicId, setPublicId] = useState('');
+  const [cloudName] = useState('dxkozpx6g');
+  const [uploadPreset] = useState('jcck4okm');
 
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName
+    }
+  });
+  const uwConfig = {
+    cloudName,
+    uploadPreset,
+    cropping: true,
+    multiple: false,
+  };
+
+  const handleImageUpload = (publicId) => {
+    setPublicId(publicId);
+  };
+  const myImage = cld.image(publicId);
   const handleAdd = async () => {
     try {
       // Send a POST request to your API endpoint to add information
       const response = await axios.post('http://localhost:5000/importantInformation', {
         title,
         subtitle,
+        publicId,
         description,
       });
 
@@ -44,7 +67,7 @@ const AddImportantInformation = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Add Important Information</h1>
 
-      <div className="mb-4">
+      <div id="form" className="mb-4">
         <label htmlFor="title" className="block text-sm font-medium text-gray-600">
           Title
         </label>
@@ -84,6 +107,20 @@ const AddImportantInformation = () => {
           onChange={(e) => setDescription(e.target.value)}
           className="mt-1 p-2 border border-gray-300 rounded-md w-full"
         ></textarea>
+      </div>
+      <div className="mb-4">
+        <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
+          Cloudinary Upload
+        </label>
+        <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
+        <div style={{ width: "400px" }}>
+                
+                <AdvancedImage
+                style={{ maxWidth: "100%" }}
+                cldImg={myImage}
+                plugins={[responsive(), placeholder()]}
+                />
+            </div>
       </div>
 
       <button
