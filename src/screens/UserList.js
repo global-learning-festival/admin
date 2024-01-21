@@ -46,7 +46,7 @@ const UserList = () => {
   );
 
   return (
-    <div className="flex flex-col items-center mt-8">
+    <div className="">
       {/* Add Manager Button */}
       <Link to="/addmanager">
         <button className="bg-blue-500 text-white px-4 py-2 rounded-md my-2">
@@ -54,6 +54,7 @@ const UserList = () => {
         </button>
       </Link>
       {/* User Table */}
+      <div className="flex flex-col items-center">
       <table className="w-full max-w-md bg-white border border-gray-300 shadow-md mt-4">
         <thead>
           <tr>
@@ -79,6 +80,7 @@ const UserList = () => {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };
