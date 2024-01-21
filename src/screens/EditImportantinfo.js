@@ -108,7 +108,7 @@ const EditImportantInformation = () => {
       {infodata && infodata.map((infolist, index) => (
         <div className="container mx-auto p-4" key={infolist.id}>
           <h1 className="text-2xl font-bold mb-4">Edit Important Information</h1>
-          <form onSubmit={handleEdit}>
+          <div id='form' >
             <div className="mb-4">
               <label htmlFor="title" className="block text-sm font-medium text-gray-600">
                 Title
@@ -166,10 +166,12 @@ const EditImportantInformation = () => {
             <button
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+              onClick={handleEdit}  
             >
               Edit Information
+              
             </button>
-          </form>
+          </div>
           <button
             onClick={handleDelete}
             className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
