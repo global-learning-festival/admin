@@ -12,7 +12,9 @@ export default function App() {
   const [title, setTitle] = useState("");
   const [event, setEvent] = useState("");
   const [eventlist, setEventlist] = useState([]);
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState('');
+  const [titleError, setTitleError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
   const navigate = useNavigate();
 
   const [uwConfig] = useState({
@@ -77,8 +79,34 @@ export default function App() {
     fetchData();
   }, []);
 
+  const validateInput = () => {
+    let isValid = true;
+
+    if (title.trim() === '') {
+      setTitleError('Please enter a title');
+      isValid = false;
+    } else {
+      setTitleError('');
+    }
+
+    if (description.trim() === '') {
+      setDescriptionError('Please enter a description');
+      isValid = false;
+    } else {
+      setDescriptionError('');
+    }
+
+    return isValid;
+  };
+
   const handleAdd = async (e) => {
     e.preventDefault();
+
+    if (!validateInput()) {
+      // If input is not valid, stop the function
+      return;
+    }
+    
     try {
       console.log(publicId);
       const response = await axios.post(`http://localhost:5000/announcement`, {
@@ -118,8 +146,9 @@ export default function App() {
             name="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+            className={`mt-1 p-2 border ${titleError ? 'border-red-500' : 'border-gray-300'} rounded-md w-full`}
           />
+          {titleError && <p className="text-red-500 text-xs mt-1">{titleError}</p>}
         </div>
 
         <div className="mb-4">
@@ -135,8 +164,9 @@ export default function App() {
             rows="4"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+            className={`mt-1 p-2 border ${descriptionError ? 'border-red-500' : 'border-gray-300'} rounded-md w-full`}
           ></textarea>
+          {descriptionError && <p className="text-red-500 text-xs mt-1">{descriptionError}</p>}
         </div>
         <div className="mb-4">
           <label
