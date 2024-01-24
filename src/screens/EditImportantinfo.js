@@ -14,6 +14,26 @@ const EditImportantInformation = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        let token = localStorage.getItem("token");
+  
+        await axios({
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          method: "get",
+          url: "http://localhost:5000/validateLogin",
+        })
+          .then(function (response) {
+            console.log(response);
+            if (response.data.message == "Unauthorized access") {
+              localStorage.clear();
+              window.location.replace("../login");
+            }
+          })
+          .catch(function (response) {
+            //Handle error
+            console.dir(response);
+          });
         const response = await axios.get(`http://localhost:5000/info/${infoid}`);
 
         // Check if the response data is an array and set infodata accordingly
