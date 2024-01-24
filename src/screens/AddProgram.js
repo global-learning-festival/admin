@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
@@ -37,7 +37,31 @@ const AddProgramPage = () => {
     cropping: true,
     multiple: false,
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      let token = localStorage.getItem("token");
 
+      await axios({
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        method: "get",
+        url: "http://localhost:5000/validateLogin",
+      })
+        .then(function (response) {
+          console.log(response);
+          if (response.data.message == "Unauthorized access") {
+            localStorage.clear();
+            window.location.replace("../login");
+          }
+        })
+        .catch(function (response) {
+          //Handle error
+          console.dir(response);
+        });
+    };
+    fetchData();
+  });
   const handleImageUpload = (publicId) => {
     setPublicId(publicId);
   };

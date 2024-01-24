@@ -68,6 +68,37 @@
           setSurveyLink(data.survey_link);
         } catch (error) {
           console.error('Error fetching program information:', error);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let token = localStorage.getItem("token");
+  
+        await axios({
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          method: "get",
+          url: "http://localhost:5000/validateLogin",
+        })
+          .then(function (response) {
+            console.log(response);
+            if (response.data.message == "Unauthorized access") {
+              localStorage.clear();
+              window.location.replace("../login");
+            }
+          })
+          .catch(function (response) {
+            //Handle error
+            console.dir(response);
+          });
+        const response = await axios.get(`http://localhost:5000/events/${eventid}`);
+  
+        // Check if the response data is an array and set programData accordingly
+        if (Array.isArray(response.data)) {
+          setProgramData(response.data);
+        } else {
+          // If the response data is not an array, wrap it in an array
+          setProgramData([response.data]);
         }
       };
 
