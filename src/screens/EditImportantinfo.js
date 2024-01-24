@@ -16,6 +16,9 @@ const EditImportantInformation = () => {
   const [publicId, setPublicId] = useState('');
   const [cloudName] = useState('dxkozpx6g');
   const [uploadPreset] = useState('jcck4okm');
+  const [titleError, setTitleError] = useState('');
+  const [subtitleError, setSubtitleError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
 
   const cld = new Cloudinary({
     cloud: {
@@ -59,9 +62,32 @@ const EditImportantInformation = () => {
     fetchData();
   }, [infoid]);
 
-
   const handleEdit = async (e) => {
     e.preventDefault();
+
+    // Validate Title
+    if (!title.trim()) {
+      setTitleError('Title is required');
+      return;
+    } else {
+      setTitleError('');
+    }
+
+    // Validate Subtitle
+    if (!subtitle.trim()) {
+      setSubtitleError('Subtitle is required');
+      return;
+    } else {
+      setSubtitleError('');
+    }
+
+    // Validate Description
+    if (!description.trim()) {
+      setDescriptionError('Description is required');
+      return;
+    } else {
+      setDescriptionError('');
+    }
     try {
       const response = await axios.put(`http://localhost:5000/importantinfo/${infoid}`, {
         title,
@@ -119,8 +145,9 @@ const EditImportantInformation = () => {
                 name="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                className={`mt-1 p-2 border ${titleError ? 'border-red-500' : 'border-gray-300'} rounded-md w-full`}
               />
+              {titleError && <p className="text-red-500 text-xs mt-1">{titleError}</p>}
             </div>
 
             <div className="mb-4">
@@ -133,8 +160,9 @@ const EditImportantInformation = () => {
                 name="subtitle"
                 value={subtitle}
                 onChange={(e) => setSubtitle(e.target.value)}
-                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                className={`mt-1 p-2 border ${subtitleError ? 'border-red-500' : 'border-gray-300'} rounded-md w-full`}
               />
+              {subtitleError && <p className="text-red-500 text-xs mt-1">{subtitleError}</p>}
             </div>
 
             <div className="mb-4">
@@ -147,8 +175,9 @@ const EditImportantInformation = () => {
                 rows="4"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                className={`mt-1 p-2 border ${descriptionError ? 'border-red-500' : 'border-gray-300'} rounded-md w-full`}
               ></textarea>
+              {descriptionError && <p className="text-red-500 text-xs mt-1">{descriptionError}</p>}
             </div>
             <div>
               <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
