@@ -16,6 +16,8 @@ const EditAnnouncement = () => {
   const [eventlist, setEventlist] = useState([]);
   const [announcementData, setAnnouncementData] = useState([])
   const { announcementid } = useParams();
+  const [titleError, setTitleError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
   const navigate = useNavigate();
   const cld = new Cloudinary({
     cloud: {
@@ -26,17 +28,8 @@ const EditAnnouncement = () => {
   const [uwConfig] = useState({
     cloudName,
     uploadPreset,
-    cropping: true, //add a cropping step
-    // showAdvancedOptions: true,  //add advanced options (public_id and tag)
-    // sources: [ "local", "url"], // restrict the upload sources to URL and local files
-    multiple: false,  //restrict upload to a single file
-    // folder: "user_images", //upload files to the specified folder
-    // tags: ["users", "profile"], //add the given tags to the uploaded files
-    // context: {alt: "user_uploaded"}, //add the given context data to the uploaded files
-    // clientAllowedFormats: ["images"], //restrict uploading to image files only
-    // maxImageFileSize: 2000000,  //restrict file size to less than 2MB
-    // maxImageWidth: 500, //Scales the image down to a width of 2000 pixels before uploading
-    // theme: "purple", //change to a purple theme
+    cropping: true, 
+    multiple: false,  
   });
   
   useEffect(() => {
@@ -55,10 +48,11 @@ const EditAnnouncement = () => {
           setAnnouncementData([response.data]);
         }
 
-        const {title, description, eventid } = response.data[0]; // Assuming the data is an array
+        const {title, description, eventid, image } = response.data[0]; // Assuming the data is an array
         setTitle(title);
         setDescription(description);
-        setEvent(eventid)
+        setEvent(eventid);
+        setPublicId(image || '');
         console.log(response.data)
     } catch (error) {
         console.error('Error fetching information:', error);
@@ -68,8 +62,34 @@ const EditAnnouncement = () => {
     fetchData();
   }, [announcementid]);
 
-    const handleEdit = async (e) => {
+  const validateInput = () => {
+    let isValid = true;
+
+    if (title.trim() === '') {
+      setTitleError('Please enter a title');
+      isValid = false;
+    } else {
+      setTitleError('');
+    }
+
+    if (description.trim() === '') {
+      setDescriptionError('Please enter a description');
+      isValid = false;
+    } else {
+      setDescriptionError('');
+    }
+
+    return isValid;
+  };
+
+  const handleEdit = async (e) => {
     e.preventDefault();
+
+    if (!validateInput()) {
+      // If input is not valid, stop the function
+      return;
+    }
+    
     try {
       const response = await axios.put(`http://localhost:5000/announcements/${announcementid}`, {
         title,
@@ -104,7 +124,7 @@ const EditAnnouncement = () => {
           <div style={{ width: "800px" }}>
             <AdvancedImage
             style={{ maxWidth: "100%" }}
-            cldImg={cld.image(publicId || announcementlist.image)}
+            cldImg={cld.image(publicId)}
             plugins={[responsive(), placeholder()]}
             />
           </div>
@@ -120,9 +140,10 @@ const EditAnnouncement = () => {
                 name="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-              />
-            </div>
+                className={`mt-1 p-2 border ${titleError ? 'border-red-500' : 'border-gray-300'} rounded-md w-full`}
+          />
+          {titleError && <p className="text-red-500 text-xs mt-1">{titleError}</p>}
+        </div>
 
             <div className="mb-4">
               <label htmlFor="description" className="block text-sm font-medium text-gray-600">
@@ -134,9 +155,10 @@ const EditAnnouncement = () => {
                 rows="4"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-              ></textarea>
-            </div>
+                className={`mt-1 p-2 border ${descriptionError ? 'border-red-500' : 'border-gray-300'} rounded-md w-full`}
+          ></textarea>
+          {descriptionError && <p className="text-red-500 text-xs mt-1">{descriptionError}</p>}
+        </div>
             <label htmlFor="eventlist" className="block text-sm font-medium text-gray-600">
             Event list
           </label>
