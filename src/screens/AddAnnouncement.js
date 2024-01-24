@@ -2,17 +2,17 @@ import { useState, useEffect } from "react";
 import CloudinaryUploadWidget from "../components/CloudinaryUpload";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function App() {
   const [publicId, setPublicId] = useState("");
   const [cloudName] = useState("dxkozpx6g");
   const [uploadPreset] = useState("jcck4okm");
-  const [title, setTitle] = useState('');
-  const [event, setEvent] = useState('');
+  const [title, setTitle] = useState("");
+  const [event, setEvent] = useState("");
   const [eventlist, setEventlist] = useState([]);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
   const navigate = useNavigate();
 
   const [uwConfig] = useState({
@@ -21,7 +21,7 @@ export default function App() {
     cropping: true, //add a cropping step
     // showAdvancedOptions: true,  //add advanced options (public_id and tag)
     // sources: [ "local", "url"], // restrict the upload sources to URL and local files
-    multiple: false,  //restrict upload to a single file
+    multiple: false, //restrict upload to a single file
     // folder: "user_images", //upload files to the specified folder
     // tags: ["users", "profile"], //add the given tags to the uploaded files
     // context: {alt: "user_uploaded"}, //add the given context data to the uploaded files
@@ -35,8 +35,8 @@ export default function App() {
 
   const cld = new Cloudinary({
     cloud: {
-      cloudName
-    }
+      cloudName,
+    },
   });
 
   const myImage = cld.image(publicId);
@@ -44,11 +44,33 @@ export default function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/eventsannouncement');
+        let token = localStorage.getItem("token");
+
+        await axios({
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          method: "get",
+          url: "http://localhost:5000/validateLogin",
+        })
+          .then(function (response) {
+            console.log(response);
+            if (response.data.message == "Unauthorized access") {
+              localStorage.clear();
+              window.location.replace("../login");
+            }
+          })
+          .catch(function (response) {
+            //Handle error
+            console.dir(response);
+          });
+        const response = await axios.get(
+          "http://localhost:5000/eventsannouncement"
+        );
         setEventlist(response.data);
-        console.log('Event List', response.data);
+        console.log("Event List", response.data);
       } catch (error) {
-        console.error('Error fetching events', error);
+        console.error("Error fetching events", error);
       }
     };
 
@@ -58,17 +80,17 @@ export default function App() {
   const handleAdd = async (e) => {
     e.preventDefault();
     try {
-      console.log(publicId)
+      console.log(publicId);
       const response = await axios.post(`http://localhost:5000/announcement`, {
         title,
         description,
         publicId,
-        eventid :event
+        eventid: event,
       });
-      console.log('API Response:', response.data);
-      return navigate('/viewannouncements')
+      console.log("API Response:", response.data);
+      return navigate("/viewannouncements");
     } catch (error) {
-      console.error('Error updating information:', error);
+      console.error("Error updating information:", error);
     }
   };
 
@@ -84,7 +106,10 @@ export default function App() {
       </div>
       <form onSubmit={handleAdd}>
         <div className="mb-4">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-600">
+          <label
+            htmlFor="title"
+            className="block text-sm font-medium text-gray-600"
+          >
             Title
           </label>
           <input
@@ -98,7 +123,10 @@ export default function App() {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-600">
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium text-gray-600"
+          >
             Description
           </label>
           <textarea
@@ -111,7 +139,10 @@ export default function App() {
           ></textarea>
         </div>
         <div className="mb-4">
-          <label htmlFor="eventlist" className="block text-sm font-medium text-gray-600">
+          <label
+            htmlFor="eventlist"
+            className="block text-sm font-medium text-gray-600"
+          >
             Event list
           </label>
           <select
@@ -128,7 +159,10 @@ export default function App() {
             ))}
           </select>
         </div>
-        <label htmlFor="imageupload" className="block text-sm font-medium text-gray-600">
+        <label
+          htmlFor="imageupload"
+          className="block text-sm font-medium text-gray-600"
+        >
           Image
         </label>
 

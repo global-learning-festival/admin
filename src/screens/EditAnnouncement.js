@@ -43,6 +43,26 @@ const EditAnnouncement = () => {
 
     const fetchData = async () => {
       try {
+        let token = localStorage.getItem("token");
+  
+        await axios({
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          method: "get",
+          url: "http://localhost:5000/validateLogin",
+        })
+          .then(function (response) {
+            console.log(response);
+            if (response.data.message == "Unauthorized access") {
+              localStorage.clear();
+              window.location.replace("../login");
+            }
+          })
+          .catch(function (response) {
+            //Handle error
+            console.dir(response);
+          });
         const response1 = await axios.get('http://localhost:5000/eventsannouncement');
         setEventlist(response1.data);
         const response = await axios.get(`http://localhost:5000/announcements/${announcementid}`);
@@ -104,7 +124,7 @@ const EditAnnouncement = () => {
           <div style={{ width: "800px" }}>
             <AdvancedImage
             style={{ maxWidth: "100%" }}
-            cldImg={cld.image(publicId || announcementlist.image)}
+            cldImg={cld.image(publicId || setPublicId(announcementlist.image))}
             plugins={[responsive(), placeholder()]}
             />
           </div>

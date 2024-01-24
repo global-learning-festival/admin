@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
@@ -17,7 +18,31 @@ const AddImportantInformation = () => {
   const [titleError, setTitleError] = useState('');
   const [subtitleError, setSubtitleError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
+   useEffect(() => {
+    const fetchData = async () => {
+      let token = localStorage.getItem("token");
 
+      await axios({
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        method: "get",
+        url: "http://localhost:5000/validateLogin",
+      })
+        .then(function (response) {
+          console.log(response);
+          if (response.data.message == "Unauthorized access") {
+            localStorage.clear();
+            window.location.replace("../login");
+          }
+        })
+        .catch(function (response) {
+          //Handle error
+          console.dir(response);
+        });
+    };
+    fetchData();
+  });
   const cld = new Cloudinary({
     cloud: {
       cloudName
@@ -77,35 +102,37 @@ const AddImportantInformation = () => {
         description,
       });
 
+
       // Handle the response as needed
-      console.log('Added Information:', response.data);
+      console.log("Added Information:", response.data);
 
       // Show success notification
-      NotificationManager.success('Important information added successfully');
+      NotificationManager.success("Important information added successfully");
 
       // Reset the form fields after adding
-      setTitle('');
-      setSubtitle('');
-      setDescription('');
+      setTitle("");
+      setSubtitle("");
+      setDescription("");
 
       // Auto-refresh the page after a short delay (you can adjust the delay as needed)
       setTimeout(() => {
-        window.location.replace('/viewimportantinfo');
+        window.location.replace("/viewimportantinfo");
       }, 600);
     } catch (error) {
-      console.error('Error adding information:', error);
+      console.error("Error adding information:", error);
       // Show error notification
-      NotificationManager.error('Error adding important information');
+      NotificationManager.error("Error adding important information");
     }
   };
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Add Important Information</h1>
-      
-      
-      <div id="form" className='mb-4' >
+
+      <div id="form" className="mb-4">
+
         <label htmlFor="title" className="block text-sm font-medium text-gray-600">
+
           Title
         </label>
         <input
@@ -121,7 +148,10 @@ const AddImportantInformation = () => {
       </div>
 
       <div className="mb-4">
-        <label htmlFor="subtitle" className="block text-sm font-medium text-gray-600">
+        <label
+          htmlFor="subtitle"
+          className="block text-sm font-medium text-gray-600"
+        >
           Subtitle
         </label>
         <input
@@ -136,7 +166,10 @@ const AddImportantInformation = () => {
       </div>
 
       <div className="mb-4">
-        <label htmlFor="description" className="block text-sm font-medium text-gray-600">
+        <label
+          htmlFor="description"
+          className="block text-sm font-medium text-gray-600"
+        >
           Description
         </label>
         <textarea
@@ -169,7 +202,9 @@ const AddImportantInformation = () => {
       >
         Add Information
       </button>
-      <NotificationContainer style={{ bottom: '0', right: '0', left: '0', top: 'auto' }} />
+      <NotificationContainer
+        style={{ bottom: "0", right: "0", left: "0", top: "auto" }}
+      />
     </div>
   );
 };

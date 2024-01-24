@@ -11,6 +11,29 @@ const UserList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        let token = localStorage.getItem("token");
+  
+        await axios({
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          method: "get",
+          url: "http://localhost:5000/validateLogin",
+        })
+          .then(function (response) {
+            console.log(response);
+            if (response.data.message == "Unauthorized access") {
+              localStorage.clear();
+              window.location.replace("../login");
+            }
+          })
+          .catch(function (response) {
+            //Handle error
+            console.dir(response);
+          });
+        const response = await axios.get('http://localhost:5000/users');
+        setUsers(response.data);
+
         const rolesResponse = await axios.get('http://localhost:5000/roles');
         const usersResponse = await axios.get('http://localhost:5000/users');
 
