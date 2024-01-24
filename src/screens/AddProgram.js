@@ -59,12 +59,13 @@ const AddProgramPage = () => {
   const handleImageUpload = (publicId) => {
     setPublicId(publicId);
   };
+  
   const myImage = cld.image(publicId);
   const handleAddEvent = async () => {
     try {
       const response = await axios.post('http://localhost:5000/events', {
         title,
-        image_banner: publicId,
+        publicId,
         time_start,
         time_end,
         location,
@@ -119,7 +120,7 @@ const AddProgramPage = () => {
                 
                 <AdvancedImage
                 style={{ maxWidth: "100%" }}
-                cldImg={myImage}
+                cldImg={cld.image(publicId || image_banner)}
                 plugins={[responsive(), placeholder()]}
                 />
             </div>
