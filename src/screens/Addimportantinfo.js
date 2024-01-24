@@ -7,6 +7,7 @@ import CloudinaryUploadWidget from "../components/CloudinaryUpload";
 import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
 
+
 const AddImportantInformation = () => {
   const [title, setTitle] = useState('');
   const [subtitle, setSubtitle] = useState('');
@@ -14,7 +15,10 @@ const AddImportantInformation = () => {
   const [publicId, setPublicId] = useState('');
   const [cloudName] = useState('dxkozpx6g');
   const [uploadPreset] = useState('jcck4okm');
-useEffect(() => {
+  const [titleError, setTitleError] = useState('');
+  const [subtitleError, setSubtitleError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
+   useEffect(() => {
     const fetchData = async () => {
       let token = localStorage.getItem("token");
 
@@ -55,7 +59,40 @@ useEffect(() => {
     setPublicId(publicId);
   };
   const myImage = cld.image(publicId);
+
+  const validateInput = () => {
+    let isValid = true;
+
+    if (title.trim() === '') {
+      setTitleError('Please enter a title');
+      isValid = false;
+    } else {
+      setTitleError('');
+    }
+
+    if (subtitle.trim() === '') {
+      setSubtitleError('Please enter a subtitle');
+      isValid = false;
+    } else {
+      setSubtitleError('');
+    }
+
+    if (description.trim() === '') {
+      setDescriptionError('Please enter a description');
+      isValid = false;
+    } else {
+      setDescriptionError('');
+    }
+
+    return isValid;
+  };
+
   const handleAdd = async () => {
+    if (!validateInput()) {
+      // If input is not valid, stop the function
+      return;
+    }
+
     try {
       // Send a POST request to your API endpoint to add information
       const response = await axios.post('http://localhost:5000/importantInformation', {
@@ -92,10 +129,8 @@ useEffect(() => {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Add Important Information</h1>
 
-
-
-
       <div id="form" className="mb-4">
+
         <label htmlFor="title" className="block text-sm font-medium text-gray-600">
 
           Title
@@ -106,8 +141,10 @@ useEffect(() => {
           name="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+          className={`mt-1 p-2 border rounded-md w-full ${titleError ? 'border-red-500' : 'border-gray-300'}`}
+
         />
+        {titleError && <p className="text-red-500 text-xs mt-1">{titleError}</p>}
       </div>
 
       <div className="mb-4">
@@ -123,8 +160,9 @@ useEffect(() => {
           name="subtitle"
           value={subtitle}
           onChange={(e) => setSubtitle(e.target.value)}
-          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+          className={`mt-1 p-2 border rounded-md w-full  ${subtitleError ? 'border-red-500' : 'border-gray-300'}`}
         />
+        {subtitleError && <p className="text-red-500 text-xs mt-1">{subtitleError}</p>}
       </div>
 
       <div className="mb-4">
@@ -140,8 +178,9 @@ useEffect(() => {
           rows="4"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+          className={`mt-1 p-2 border rounded-md w-full ${descriptionError ? 'border-red-500' : 'border-gray-300'}`}
         ></textarea>
+        {descriptionError && <p className="text-red-500 text-xs mt-1">{descriptionError}</p>}
       </div>
       <div className="mb-4">
         <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
@@ -149,13 +188,12 @@ useEffect(() => {
         </label>
         <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
         <div style={{ width: "400px" }}>
-                
-                <AdvancedImage
-                style={{ maxWidth: "100%" }}
-                cldImg={myImage}
-                plugins={[responsive(), placeholder()]}
-                />
-            </div>
+          <AdvancedImage
+            style={{ maxWidth: "100%" }}
+            cldImg={myImage}
+            plugins={[responsive(), placeholder()]}
+          />
+        </div>
       </div>
 
       <button
