@@ -47,7 +47,7 @@ const Navbar = () => {
 
       <ul className='hidden md:flex mr-20 pt-3'>
         
-        <li className='p-4'><Link to="/" className='no-underline text-white hover:underline' onClick={handleNav}>Home</Link></li>
+        <li className='p-4'><Link to="/" className='no-underline text-white hover:underline' onClick={handleNav}>Events</Link></li>
           <li className='p-4'><Link to="/viewannouncements" className='no-underline text-white hover:underline' onClick={handleNav}>Announcements</Link></li>
           <li className='p-4 '><Link to="/userlist" className='no-underline text-white hover:underline' onClick={handleNav}>User List</Link></li>
           <li className='p-4'><Link to="/mapadding" className='no-underline text-white hover:underline' onClick={handleNav}>Map Editing</Link></li>

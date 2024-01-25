@@ -1,21 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Popup, Marker, useMapEvents } from 'react-leaflet';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import L from 'leaflet';
-import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
-import 'leaflet-routing-machine';
-import Image from '../assets/school.jpeg';
-import waterMarker from '../assets/marker/water.png';
-import registerMarker from '../assets/marker/register.png';
-import conferenceMarker from '../assets/marker/conference.png';
-import toiletMarker from '../assets/marker/toilet.png';
-import 'leaflet/dist/leaflet.css';
-import axios from 'axios';
-import '../styles/map.css';
-import Redmarker from '../assets/marker.png';
-import '../styles/marker.css';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  Popup,
+  Marker,
+  useMapEvents,
+} from "react-leaflet";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import L from "leaflet";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
+import "leaflet-routing-machine";
+import Image from "../assets/school.jpeg";
+import waterMarker from "../assets/marker/water.png";
+import registerMarker from "../assets/marker/register.png";
+import conferenceMarker from "../assets/marker/conference.png";
+import toiletMarker from "../assets/marker/toilet.png";
+import "leaflet/dist/leaflet.css";
+import axios from "axios";
+import "../styles/map.css";
+import "../styles/App.css";
+import Redmarker from "../assets/marker.png";
+import "../styles/marker.css";
+import { useNavigate } from "react-router-dom";
 import CloudinaryUploadWidget from "../components/CloudinaryUpload";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
@@ -24,15 +31,14 @@ const AdminMap = () => {
   const position = [1.310411032362568, 103.77767848691333];
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [markers, setMarkers] = useState([]);
-  const [location_name, setLocation] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
+  const [location_name, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
   const navigate = useNavigate();
   const [cloudName] = useState("dxkozpx6g");
   const [uploadPreset] = useState("jcck4okm");
   const [publicId, setPublicId] = useState("");
-
-
+  const [loading, setLoading] = useState(false);
 
   const [uwConfig] = useState({
     cloudName,
@@ -40,7 +46,7 @@ const AdminMap = () => {
     cropping: true, //add a cropping step
     // showAdvancedOptions: true,  //add advanced options (public_id and tag)
     // sources: [ "local", "url"], // restrict the upload sources to URL and local files
-    multiple: false,  //restrict upload to a single file
+    multiple: false, //restrict upload to a single file
     // folder: "user_images", //upload files to the specified folder
     // tags: ["users", "profile"], //add the given tags to the uploaded files
     // context: {alt: "user_uploaded"}, //add the given context data to the uploaded files
@@ -52,17 +58,18 @@ const AdminMap = () => {
 
   const cld = new Cloudinary({
     cloud: {
-      cloudName
-    }
+      cloudName,
+    },
   });
 
   const myImage = cld.image(publicId);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         let token = localStorage.getItem("token");
-  
+
         await axios({
           headers: {
             authorization: "Bearer " + token,
@@ -81,11 +88,12 @@ const AdminMap = () => {
             //Handle error
             console.dir(response);
           });
-        const response = await axios.get('http://localhost:5000/markers');
+        const response = await axios.get("http://localhost:5000/markers");
         setMarkers(response.data);
-        console.log('Refill data:', response.data);
+        setLoading(false);
+        console.log("Refill data:", response.data);
       } catch (error) {
-        console.error('Error fetching refill locations:', error);
+        console.error("Error fetching refill locations:", error);
       }
     };
 
@@ -108,50 +116,75 @@ const AdminMap = () => {
   const RightClickDisplay = () => {
     const map = useMapEvents({
       contextmenu: (e) => {
-        console.log('coords', e.latlng);
-       // const display = document.getElementById('coordinates-display');
-        //display.innerHTML = `Right click coordinates:<br>Latitude and Longitude:(${e.latlng.lat.toFixed(6)},${e.latlng.lng.toFixed(6)})`;
+        console.log("coords", e.latlng);
+        const display = document.getElementById("coordinates-display");
+        display.innerHTML = `Right click coordinates:<br>Latitude and Longitude:(${e.latlng.lat.toFixed(
+          6
+        )},${e.latlng.lng.toFixed(6)})`;
         setSelectedPosition(e.latlng);
       },
     });
     return null;
   };
   const handleEditInformationClick = (markerid) => {
-    navigate(`/mapediting/${markerid}`); 
+    navigate(`/mapediting/${markerid}`);
     // Redirect to the specified route
   };
-  
 
   const Addlocation = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/marker', {
+      const response = await axios.post("http://localhost:5000/marker", {
         location_name,
         description,
         category,
         coordinates: `${selectedPosition.lat},${selectedPosition.lng}`, // Convert to string
-        publicId
+        publicId,
       });
 
-      console.log('Added marker:', response.data);
+      console.log("Added marker:", response.data);
 
-      toast.success('Marker added successfully', { position: toast.POSITION.TOP_RIGHT});
+      toast.success("Marker added successfully", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
 
-      setLocation('');
-      setDescription('');
-      setCategory('');
+      setLocation("");
+      setDescription("");
+      setCategory("");
       setSelectedPosition(null);
       window.location.reload();
     } catch (error) {
-      console.error('Error adding Marker:', error);
+      console.error("Error adding Marker:", error);
 
-      toast.error('Error adding Marker. Please try again.', { position: toast.POSITION.TOP_RIGHT });
+      toast.error("Error adding Marker. Please try again.", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
     }
   };
 
   return (
     <div className="admin-map-container">
-      <div id="markerlist" style={{ width: '50%', float: 'left', marginRight: '10px', marginTop: '2%' }}>
-        <MapContainer center={position} zoom={16} style={{ width: '100%', height: '800px', marginLeft: "60px" }} ref={mapRef}>
+      {loading ? (
+        <div className="loader-container">
+          <div className="spinner"></div>
+        </div>
+      ) : (
+        <div></div>
+      )}
+      <div
+        id="markerlist"
+        style={{
+          width: "50%",
+          float: "left",
+          marginRight: "10px",
+          marginTop: "2%",
+        }}
+      >
+        <MapContainer
+          center={position}
+          zoom={16}
+          style={{ width: "100%", height: "800px", marginLeft: "60px" }}
+          ref={mapRef}
+        >
           <TileLayer
             url="https://www.onemap.gov.sg/maps/tiles/Default/{z}/{x}/{y}.png"
             attribution='Map data © <a href="https://www.onemap.sg/" target="_blank">OneMap</a>'
@@ -160,16 +193,16 @@ const AdminMap = () => {
           {markers.map((markerlocation) => {
             let iconUrl;
             switch (markerlocation.category) {
-              case 'water':
+              case "water":
                 iconUrl = waterMarker;
                 break;
-              case 'register':
+              case "register":
                 iconUrl = registerMarker;
                 break;
-              case 'conference':
+              case "conference":
                 iconUrl = conferenceMarker;
                 break;
-              case 'toilet':
+              case "toilet":
                 iconUrl = toiletMarker;
                 break;
               default:
@@ -183,23 +216,35 @@ const AdminMap = () => {
               popupAnchor: [0, -32],
             });
 
-            const coordinates1 = markerlocation.coordinates.split(',').map((coord) => parseFloat(coord));
-            console.log('Refill Location:', coordinates1);
+            const coordinates1 = markerlocation.coordinates
+              .split(",")
+              .map((coord) => parseFloat(coord));
+            console.log("Refill Location:", coordinates1);
             return (
-              <Marker key={markerlocation.mapid} position={coordinates1} icon={customIcon}>
+              <Marker
+                key={markerlocation.mapid}
+                position={coordinates1}
+                icon={customIcon}
+              >
                 <Popup>
                   <div id={`divRefill${markerlocation.mapid}`}>
-                    <h3 id={`Refill${markerlocation.mapid}`}>{markerlocation.location_name}</h3>
-                  <div style={{ width: "300px" }}>
-                
-                <AdvancedImage
-                style={{ maxWidth: "100%",  }}
-                cldImg={cld.image(publicId || markerlocation.image)}
-                plugins={[responsive(), placeholder()]}
-                />
-            </div>
+                    <h3 id={`Refill${markerlocation.mapid}`}>
+                      {markerlocation.location_name}
+                    </h3>
+                    <div style={{ width: "300px" }}>
+                      <AdvancedImage
+                        style={{ maxWidth: "100%" }}
+                        cldImg={cld.image(publicId || markerlocation.image)}
+                        plugins={[responsive(), placeholder()]}
+                      />
+                    </div>
                     <p>{markerlocation.description}</p>
-                    <button id="RefillButton" onClick={()=>handleEditInformationClick(markerlocation.mapid)}>{`Edit marker`}</button>
+                    <button
+                      id="RefillButton"
+                      onClick={() =>
+                        handleEditInformationClick(markerlocation.mapid)
+                      }
+                    >{`Edit marker`}</button>
                   </div>
                 </Popup>
               </Marker>
@@ -207,13 +252,19 @@ const AdminMap = () => {
           })}
         </MapContainer>
       </div>
-      
-      <div id="form" style={{ width: '40%', float: 'right', marginLeft: '10px' }}>
+
+      <div
+        id="form"
+        style={{ width: "40%", float: "right", marginLeft: "10px" }}
+      >
         <div className="container mx-auto p-4">
           <h1 className="text-2xl font-bold mb-4">Add Marker</h1>
 
           <div className="mb-4">
-            <label htmlFor="Location_name" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="Location_name"
+              className="block text-sm font-medium text-gray-600"
+            >
               Location Name
             </label>
             <input
@@ -227,7 +278,10 @@ const AdminMap = () => {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-600"
+            >
               Description
             </label>
             <textarea
@@ -239,17 +293,19 @@ const AdminMap = () => {
               className="mt-1 p-2 border border-gray-300 rounded-md w-full"
             ></textarea>
           </div>
-          
 
           <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-600"
+            >
               Choose Location
             </label>
 
             <MapContainer
-              center={position} 
+              center={position}
               zoom={16}
-              style={{ height: '300px', width: '100%' }}
+              style={{ height: "300px", width: "100%" }}
               onClick={handleMapClick}
             >
               <TileLayer
@@ -264,14 +320,16 @@ const AdminMap = () => {
               )}
               <RightClickDisplay />
             </MapContainer>
-            {/*<div id="coordinates-display" className="coordinates-display">
+            <div id="coordinates-display" className="coordinates-display">
               Right click on the map to see the coordinates
-              </div>*/}
+            </div>
           </div>
-          
 
           <div className="mb-4">
-            <label htmlFor="location" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="location"
+              className="block text-sm font-medium text-gray-600"
+            >
               category
             </label>
             <select
@@ -289,35 +347,43 @@ const AdminMap = () => {
             </select>
           </div>
           <div className="mb-4">
-        <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
-          Cloudinary Upload
-        </label>
-        <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
-        
-        <div style={{ width: "200px" , marginRight: '10px' }}>
-        <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
-          Image Preview
-        </label>
-                <AdvancedImage
+            <label
+              htmlFor="cloudinary"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Cloudinary Upload
+            </label>
+            <CloudinaryUploadWidget
+              uwConfig={uwConfig}
+              setPublicId={setPublicId}
+            />
+
+            <div style={{ width: "200px", marginRight: "10px" }}>
+              <label
+                htmlFor="cloudinary"
+                className="block text-sm font-medium text-gray-600"
+              >
+                Image Preview
+              </label>
+              <AdvancedImage
                 style={{ maxWidth: "100%" }}
                 cldImg={myImage}
                 plugins={[responsive(), placeholder()]}
-                />
+              />
             </div>
-      </div>
-          
-      <div className="flex justify-center">
-      <button
-        onClick={Addlocation}
-        className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-        style={{ width: "25%" }}
-      >
-        Add Marker
-      </button>
-    </div>
+          </div>
+
+          <div className="flex justify-center">
+            <button
+              onClick={Addlocation}
+              className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+              style={{ width: "25%" }}
+            >
+              Add Marker
+            </button>
+          </div>
         </div>
       </div>
-      
     </div>
   );
 };

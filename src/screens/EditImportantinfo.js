@@ -1,29 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { NotificationContainer, NotificationManager } from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "../styles/App.css";
+
+import { useParams } from "react-router-dom";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
 import CloudinaryUploadWidget from "../components/CloudinaryUpload";
 import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
 
 const EditImportantInformation = () => {
-  const [title, setTitle] = useState('');
-  const [subtitle, setSubtitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState("");
+  const [subtitle, setSubtitle] = useState("");
+  const [description, setDescription] = useState("");
   const [infodata, setInfodata] = useState([]);
   const { infoid } = useParams();
-  const [publicId, setPublicId] = useState('');
-  const [cloudName] = useState('dxkozpx6g');
-  const [uploadPreset] = useState('jcck4okm');
-  const [titleError, setTitleError] = useState('');
-  const [subtitleError, setSubtitleError] = useState('');
-  const [descriptionError, setDescriptionError] = useState('');
+  const [publicId, setPublicId] = useState("");
+  const [cloudName] = useState("dxkozpx6g");
+  const [uploadPreset] = useState("jcck4okm");
+  const [titleError, setTitleError] = useState("");
+  const [subtitleError, setSubtitleError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const cld = new Cloudinary({
     cloud: {
-      cloudName
-    }
+      cloudName,
+    },
   });
   const uwConfig = {
     cloudName,
@@ -39,8 +45,10 @@ const EditImportantInformation = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
+
         let token = localStorage.getItem("token");
-  
+
         await axios({
           headers: {
             authorization: "Bearer " + token,
@@ -59,7 +67,9 @@ const EditImportantInformation = () => {
             //Handle error
             console.dir(response);
           });
-        const response = await axios.get(`http://localhost:5000/info/${infoid}`);
+        const response = await axios.get(
+          `http://localhost:5000/info/${infoid}`
+        );
 
         // Check if the response data is an array and set infodata accordingly
         if (Array.isArray(response.data)) {
@@ -68,14 +78,15 @@ const EditImportantInformation = () => {
           // If the response data is not an array, wrap it in an array
           setInfodata([response.data]);
         }
+        setLoading(false);
 
-        const {title, subtitle, description ,image} = response.data[0]; // Assuming the data is an array
+        const { title, subtitle, description, image } = response.data[0]; // Assuming the data is an array
         setTitle(title);
         setSubtitle(subtitle);
         setDescription(description);
-        setPublicId(image)
+        setPublicId(image);
       } catch (error) {
-        console.error('Error fetching information:', error);
+        console.error("Error fetching information:", error);
       }
     };
 
@@ -87,148 +98,191 @@ const EditImportantInformation = () => {
 
     // Validate Title
     if (!title.trim()) {
-      setTitleError('Title is required');
+      setTitleError("Title is required");
       return;
     } else {
-      setTitleError('');
+      setTitleError("");
     }
 
     // Validate Subtitle
     if (!subtitle.trim()) {
-      setSubtitleError('Subtitle is required');
+      setSubtitleError("Subtitle is required");
       return;
     } else {
-      setSubtitleError('');
+      setSubtitleError("");
     }
 
     // Validate Description
     if (!description.trim()) {
-      setDescriptionError('Description is required');
+      setDescriptionError("Description is required");
       return;
     } else {
-      setDescriptionError('');
+      setDescriptionError("");
     }
     try {
-      const response = await axios.put(`http://localhost:5000/importantinfo/${infoid}`, {
-        title,
-        subtitle,
-        description,
-        publicId,
-      });
-      console.log('API Response:', response.data);
+      setLoading(true);
+
+      const response = await axios.put(
+        `http://localhost:5000/importantinfo/${infoid}`,
+        {
+          title,
+          subtitle,
+          description,
+          publicId,
+        }
+      );
+      console.log("API Response:", response.data);
 
       // Show success notification
-      NotificationManager.success('Information updated successfully');
+      NotificationManager.success("Information updated successfully");
     } catch (error) {
-      console.error('Error updating information:', error);
+      console.error("Error updating information:", error);
       // Show error notification
 
-      NotificationManager.error('Error updating information');
-
+      NotificationManager.error("Error updating information");
     }
     setTimeout(() => {
-      window.location.replace('/viewimportantinfo');
+      window.location.replace("/viewimportantinfo");
     }, 900);
   };
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`http://localhost:5000/delete/${infoid}`);
-      console.log('API Response:', response.data);
+      const response = await axios.delete(
+        `http://localhost:5000/delete/${infoid}`
+      );
+      console.log("API Response:", response.data);
 
       // Show success notification
-      NotificationManager.success('Information deleted successfully');
+      NotificationManager.success("Information deleted successfully");
     } catch (error) {
-      console.error('Error deleting information:', error);
+      console.error("Error deleting information:", error);
       // Show error notification
-      NotificationManager.error('Error deleting information');
+      NotificationManager.error("Error deleting information");
     }
     setTimeout(() => {
-      window.location.replace('/viewimportantinfo');
+      window.location.replace("/viewimportantinfo");
     }, 900);
   };
 
-
   return (
     <div>
-      {infodata && infodata.map((infolist, index) => (
-        <div className="container mx-auto p-4" key={infolist.id}>
-          <h1 className="text-2xl font-bold mb-4">Edit Important Information</h1>
-          <div id='form' >
-            <div className="mb-4">
-              <label htmlFor="title" className="block text-sm font-medium text-gray-600">
-                Title
-              </label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className={`mt-1 p-2 border ${titleError ? 'border-red-500' : 'border-gray-300'} rounded-md w-full`}
-              />
-              {titleError && <p className="text-red-500 text-xs mt-1">{titleError}</p>}
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="subtitle" className="block text-sm font-medium text-gray-600">
-                Subtitle
-              </label>
-              <input
-                type="text"
-                id="subtitle"
-                name="subtitle"
-                value={subtitle}
-                onChange={(e) => setSubtitle(e.target.value)}
-                className={`mt-1 p-2 border ${subtitleError ? 'border-red-500' : 'border-gray-300'} rounded-md w-full`}
-              />
-              {subtitleError && <p className="text-red-500 text-xs mt-1">{subtitleError}</p>}
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="description" className="block text-sm font-medium text-gray-600">
-                Description
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                rows="4"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className={`mt-1 p-2 border ${descriptionError ? 'border-red-500' : 'border-gray-300'} rounded-md w-full`}
-              ></textarea>
-              {descriptionError && <p className="text-red-500 text-xs mt-1">{descriptionError}</p>}
-            </div>
-            <div>
-              <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
-                Cloudinary Upload
-              </label>
-              <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
-              <div style={{ width: "400px" }}>
-                <AdvancedImage
-                  style={{ maxWidth: "100%" }}
-                  cldImg={cld.image(publicId )}
-                  plugins={[responsive(), placeholder()]}
+      {loading ? (
+        <div className="loader-container">
+          <div className="spinner"></div>
+        </div>
+      ) : (
+        infodata &&
+        infodata.map((infolist, index) => (
+          <div className="container mx-auto p-4" key={infolist.id}>
+            <h1 className="text-2xl font-bold mb-4">
+              Edit Important Information
+            </h1>
+            <div id="form">
+              <div className="mb-4">
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-medium text-gray-600"
+                >
+                  Title
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className={`mt-1 p-2 border ${
+                    titleError ? "border-red-500" : "border-gray-300"
+                  } rounded-md w-full`}
                 />
+                {titleError && (
+                  <p className="text-red-500 text-xs mt-1">{titleError}</p>
+                )}
               </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="subtitle"
+                  className="block text-sm font-medium text-gray-600"
+                >
+                  Subtitle
+                </label>
+                <input
+                  type="text"
+                  id="subtitle"
+                  name="subtitle"
+                  value={subtitle}
+                  onChange={(e) => setSubtitle(e.target.value)}
+                  className={`mt-1 p-2 border ${
+                    subtitleError ? "border-red-500" : "border-gray-300"
+                  } rounded-md w-full`}
+                />
+                {subtitleError && (
+                  <p className="text-red-500 text-xs mt-1">{subtitleError}</p>
+                )}
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-600"
+                >
+                  Description
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  rows="4"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className={`mt-1 p-2 border ${
+                    descriptionError ? "border-red-500" : "border-gray-300"
+                  } rounded-md w-full`}
+                ></textarea>
+                {descriptionError && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {descriptionError}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="cloudinary"
+                  className="block text-sm font-medium text-gray-600"
+                >
+                  Cloudinary Upload
+                </label>
+                <CloudinaryUploadWidget
+                  uwConfig={uwConfig}
+                  setPublicId={setPublicId}
+                />
+                <div style={{ width: "400px" }}>
+                  <AdvancedImage
+                    style={{ maxWidth: "100%" }}
+                    cldImg={cld.image(publicId)}
+                    plugins={[responsive(), placeholder()]}
+                  />
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                onClick={handleEdit}
+              >
+                Edit Information
+              </button>
             </div>
             <button
-              type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-              onClick={handleEdit}  
+              onClick={handleDelete}
+              className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
             >
-              Edit Information
-              
+              Delete Information
             </button>
           </div>
-          <button
-            onClick={handleDelete}
-            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-          >
-            Delete Information
-          </button>
-        </div>
-      ))}
+        ))
+      )}
+      {}
       <NotificationContainer />
     </div>
   );
