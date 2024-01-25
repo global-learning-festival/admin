@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu, AiOutlineInfoCircle } from 'react-icons/ai';
 import isate from "../images/isate2024-logo.png"
 import { Link } from 'react-router-dom';
-import { UserAuth } from '../context/AuthContext';
+
 import '../styles/navbar.css'
 
 const Navbar = () => {
@@ -12,15 +12,12 @@ const Navbar = () => {
     setNav(!nav);
   };
 
-  const {user, logout} = UserAuth();
+  const user = localStorage.getItem("username");
+  console.log('username',user)
 
   const handleSignOut = async () => {
-    try {
-      await logout();
-
-    } catch (error) {
-      console.log(error);
-    }
+    localStorage.removeItem("username")
+    localStorage.removeItem("token")
   }
 
   return (
@@ -38,8 +35,8 @@ const Navbar = () => {
 
       <div className='hidden md:flex ml-10'>
         
-          <h4 className='w-full font-bold text-[#000] mt-2 mr-3'>{ user?.displayName }</h4>
-          { user ? (<button className='text-white bg-red font-medium rounded-md text-sm px-5 hover:bg-[#fff] hover:drop-shadow-xl' 
+          <h4 className='w-full font-bold text-[#000] mt-2 mr-3'>{user}</h4>
+          { user !=null ? (<button className='text-white bg-red font-medium rounded-md text-sm px-5 hover:bg-[#fff] hover:drop-shadow-xl' 
           onClick={handleSignOut}>Logout</button>) 
           : <button className='text-white bg-[#4B558A] font-medium rounded-md text-sm px-5 hover:bg-[#3A426C] hover:drop-shadow-xl'>
             <Link to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>Login</Link></button>}
