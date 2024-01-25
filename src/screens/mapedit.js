@@ -112,7 +112,8 @@ const AdminMapedit = () => {
       const response = await axios.put(`http://localhost:5000/marker/${markerid}`, {
         location_name,
         description,
-        category 
+        category ,
+        publicId
       });
 
      
