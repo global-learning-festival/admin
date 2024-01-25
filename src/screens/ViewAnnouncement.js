@@ -96,7 +96,7 @@ const AnnouncementList = () => {
 
   return <>
         <button
-        className='bg-blue-500 text-white px-4 py-2 rounded-md mb-4 focus:outline-none'
+        className='bg-blue-500 text-white px-4 py-2 rounded-md m-2 hover:bg-blue-600'
         onClick={handleAddAnnouncementClick}
       >
         Add Announcement

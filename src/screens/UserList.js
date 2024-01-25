@@ -71,12 +71,7 @@ const UserList = () => {
 
   return (
     <div className="flex flex-col items-center mt-8">
-      {/* Add Manager Button */}
-      <Link to="/addmanager">
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-md my-2">
-          Add Manager
-        </button>
-      </Link>
+
       {/* Filter Buttons */}
       <div className="flex space-x-4">
         {filterOptions.map((option, index) => (
@@ -124,6 +119,12 @@ const UserList = () => {
             ))}
         </tbody>
       </table>
+            {/* Add Manager Button */}
+            <Link to="/addmanager">
+        <button className="bg-blue-500 text-white px-4 py-2 rounded-md my-2">
+          Add Manager
+        </button>
+      </Link>
     </div>
   );
 };

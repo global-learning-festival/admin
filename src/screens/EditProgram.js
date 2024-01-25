@@ -165,11 +165,136 @@ const EditProgram = () => {
 
   return (
     <div>
-      {programData && programData.map((programData, index) => (
-        <div className="container mx-auto p-4" key={programData.id}>
-          <div id="form" onSubmit={handleEdit}>
-            {/* (rest of your form inputs) */}
+    {programData && programData.map((programData, index) => (
+      <div className="container mx-auto p-4" key={programData.id}>
+        <div id="form" onSubmit={handleEdit}>
+          {/* Title */}
+          <div className="mb-4">
+            <label htmlFor="title" className="block text-sm font-medium text-gray-600">
+              Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              placeholder={programData.title}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className={`mt-1 p-2 w-full border ${titleError ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+            />
+            {titleError && <p className="text-red-500 text-xs mt-1">{titleError}</p>}
           </div>
+          <div>
+            <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
+              Cloudinary Upload
+            </label>
+            <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
+            <div style={{ width: "400px" }}>
+              <AdvancedImage
+                style={{ maxWidth: "100%" }}
+                cldImg={cld.image(publicId || programData.image_banner)}
+                plugins={[responsive(), placeholder()]}
+              />
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="timestamp" className="block text-sm font-medium text-gray-600">
+              Choose Date and Time: Event Start
+            </label>
+
+            <input
+              type="datetime-local"
+              id="startTimestamp"
+              name="startTimestamp"
+              value={time_start || programData.time_start}
+              placeholder={programData.time_start}
+              onChange={(e) => setTimeStart(e.target.value)}
+              className={`mt-1 p-2 w-full border ${timeStartError ? 'border-red-500' : 'border-gray-300'} rounded-md`} />
+            {timeStartError && <p className="text-red-500 text-xs mt-1">{timeStartError}</p>}
+          </div>
+
+
+          <div className="mb-4">
+            <label htmlFor="timestamp" className="block text-sm font-medium text-gray-600">
+              Choose Date and Time: Event End
+            </label>
+            <input
+              type="datetime-local"
+              id="endTimestamp"
+              name="endTimestamp"
+              value={time_end || programData.time_end}
+              onChange={(e) => setTimeEnd(e.target.value)}
+              className={`mt-1 p-2 w-full border ${timeEndError ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+            />
+            {timeEndError && <p className="text-red-500 text-xs mt-1">{timeEndError}</p>}
+          </div>
+
+
+          <div className="mb-4">
+            <label htmlFor="location" className="block text-sm font-medium text-gray-600">
+              Location
+            </label>
+            <input
+              type="text"
+              id="location"
+              placeholder={programData.location}
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className={`mt-1 p-2 w-full border ${locationError ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+            >
+
+            </input>
+            {locationError && <p className="text-red-500 text-xs mt-1">{locationError}</p>}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="keynoteSpeaker" className="block text-sm font-medium text-gray-600">
+              Keynote Speaker
+            </label>
+            <input
+              type="text"
+              id="keynoteSpeaker"
+              placeholder={programData.keynote_speaker}
+              value={keynote_speaker}
+              onChange={(e) => setKeynoteSpeaker(e.target.value)}
+              className={`mt-1 p-2 w-full border ${keynoteSpeakerError ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+            />
+            {keynoteSpeakerError && <p className="text-red-500 text-xs mt-1">{keynoteSpeakerError}</p>}
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="description" className="block text-sm font-medium text-gray-600">
+              Description
+            </label>
+            <textarea
+              id="description"
+              placeholder={programData.description}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)} 
+              className={`mt-1 p-2 w-full border ${descriptionError ? 'border-red-500' : 'border-gray-300'} rounded-md`}
+            ></textarea>
+            {descriptionError && <p className="text-red-500 text-xs mt-1">{descriptionError}</p>}
+          </div>
+
+
+
+          <div className="mb-4">
+            <label htmlFor="surveyLink" className="block text-sm font-medium text-gray-600">
+              Survey Link
+            </label>
+            <input
+              type="text"
+              id="surveyLink"
+              className="mt-1 p-2 w-full border rounded-md"
+              placeholder={programData.survey_link}
+              value={survey_link}
+              onChange={(e) => setSurveyLink(e.target.value)}
+            />
+          </div>
+
+
+
+
           <button
             onClick={handleEdit}
             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
@@ -177,15 +302,16 @@ const EditProgram = () => {
             Edit Program
           </button>
         </div>
-      ))}
-      <button
-        onClick={handleDelete}
-        className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-      >
-        Delete Information
-      </button>
-      <NotificationContainer />
-    </div>
+        <button
+          onClick={handleDelete}
+          className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+        >
+          Delete Information
+        </button>
+        <NotificationContainer />
+      </div>
+    ))};
+  </div>
   );
 };
 
