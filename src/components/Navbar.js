@@ -37,7 +37,7 @@ const Navbar = () => {
 
       <div className='hidden md:flex ml-10'>
         
-          <h4 className='w-full font-bold text-[#000] mt-2 mr-3'>{user}</h4>
+          <h4 className='w-full font-bold text-[#FFFFFF] mt-2 mr-3'>{user}</h4>
           { user !=null ? (<button className='text-white bg-[#C20F02] font-medium rounded-md text-sm px-5 hover:bg-[#4D0702] hover:drop-shadow-xl' 
           onClick={handleSignOut}>Logout</button>) 
           : <button className='text-white bg-[#4B558A] font-medium rounded-md text-sm px-5 hover:bg-[#3A426C] hover:drop-shadow-xl'>
