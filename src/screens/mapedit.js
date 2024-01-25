@@ -116,6 +116,7 @@ const AdminMapedit = () => {
         }
       );
 
+
       console.log("Marker updated:", response.data);
 
       window.location.reload();
