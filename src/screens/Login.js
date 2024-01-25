@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AdminLoginScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
+  const navigate = useNavigate();
   const handleLogin = async () => {
     try {
       // Send a POST request to your authentication endpoint
@@ -18,12 +19,14 @@ const AdminLoginScreen = () => {
 
       // Here you can handle the token, for example, store it in local storage
       localStorage.setItem('token', token);
+      localStorage.setItem('username', username);
 
       console.log('Logged in successfully');
 
       // Reset the form fields after login
       setUsername('');
       setPassword('');
+      navigate('/')
     } catch (error) {
       console.error('Error logging in:', error);
     }
