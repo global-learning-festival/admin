@@ -25,7 +25,7 @@ class App extends React.Component {
     return (
       <div className="body">
        
-          <Navbar />
+          <Navbar/>
 
 
           <Routes>

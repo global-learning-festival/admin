@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import '../styles/App.css';
 
 const AdminLoginScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+
   const handleLogin = async () => {
     try {
+      setLoading(true);
+
       // Send a POST request to your authentication endpoint
       const response = await axios.post('http://localhost:5000/login', {
         username,
@@ -21,7 +27,6 @@ const AdminLoginScreen = () => {
       localStorage.setItem('token', token);
       localStorage.setItem('username', username);
 
-      console.log('Logged in successfully');
 
       // Reset the form fields after login
       setUsername('');
@@ -33,6 +38,12 @@ const AdminLoginScreen = () => {
   };
 
   return (
+    <div>
+    {loading ? (
+      <div className="loader-container">
+          <div className="spinner"></div>
+      </div>
+    ) : (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div>
         <h1 className="text-2xl font-bold mb-4">Admin Login</h1>
@@ -73,7 +84,10 @@ const AdminLoginScreen = () => {
         </button>
       </div>
     </div>
+    )}
+    </div>
   );
 };
+
 
 export default AdminLoginScreen;

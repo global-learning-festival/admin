@@ -198,14 +198,15 @@ const EditAnnouncement = () => {
             <button
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+              style={{ width: "18%" }}
             >
-              Edit Announcement
+              Save Announcement
             </button>
           </form>
           <button
             className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
             onClick={handleDelete}
-
+            style={{ width: "18%" }}
           >
             Delete Information
           </button>

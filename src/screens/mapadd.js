@@ -310,7 +310,7 @@ const AdminMap = () => {
       <button
         onClick={Addlocation}
         className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-        style={{ width: "23%" }}
+        style={{ width: "25%" }}
       >
         Add Marker
       </button>

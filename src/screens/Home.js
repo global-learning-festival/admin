@@ -96,7 +96,7 @@ const EventsList = () => {
     <>
       {/* Add Event Button */}
       <Link to="/addprogram">
-        <button className="bg-green-500 text-white px-4 py-2 rounded-md m-2">
+        <button className="bg-green-500 text-white px-4 py-2 rounded-md m-2 hover:bg-green-600">
           Add Event
         </button>
       </Link>
