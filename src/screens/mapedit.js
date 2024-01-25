@@ -13,6 +13,7 @@ import '../styles/map.css';
 import '../styles/marker.css';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import CloudinaryUploadWidget from "../components/CloudinaryUpload";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
 
@@ -28,7 +29,17 @@ const AdminMapedit = () => {
   const navigate = useNavigate(); // Add this line
   const [publicId, setPublicId] = useState("");
   const [cloudName] = useState("dxkozpx6g");
+  const [uploadPreset] = useState("jcck4okm");
 
+
+
+
+  const uwConfig = {
+    cloudName,
+    uploadPreset,
+    cropping: true,
+    multiple: false,
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -63,10 +74,11 @@ const AdminMapedit = () => {
           setMarkers([response.data]);
         }
         
-        const {location_name, description, category } = response.data[0]; // Assuming the data is an array
+        const {location_name, description, category, image } = response.data[0]; // Assuming the data is an array
         setLocation(location_name);
       setDescription(description);
       setCategory(category);
+      setPublicId(image || '');
 
 
 
@@ -219,17 +231,23 @@ const AdminMapedit = () => {
       </div>
 
       <div className="mb-4">
-      <div style={{ width: "200px" , marginRight: '10px' }}>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-600">
-          Image 
+        <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
+          Cloudinary Upload
         </label>
-        <AdvancedImage
-          style={{ maxWidth: "100%" }}
-          cldImg={cld.image(publicId || markerlist.image)}
-          plugins={[responsive(), placeholder()]}
-        />
+        <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} />
+        
+        <div style={{ width: "200px" , marginRight: '10px' }}>
+        <label htmlFor="cloudinary" className="block text-sm font-medium text-gray-600">
+          Image Preview
+        </label>
+                <AdvancedImage
+                style={{ maxWidth: "100%" }}
+                cldImg={myImage}
+                plugins={[responsive(), placeholder()]}
+                />
+            </div>
       </div>
-      </div>
+          
 
       <div className="mb-4">
         <label htmlFor="location" className="block text-sm font-medium text-gray-600">

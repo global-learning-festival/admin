@@ -109,8 +109,8 @@ const AdminMap = () => {
     const map = useMapEvents({
       contextmenu: (e) => {
         console.log('coords', e.latlng);
-        const display = document.getElementById('coordinates-display');
-        display.innerHTML = `Right click coordinates:<br>Latitude and Longitude:(${e.latlng.lat.toFixed(6)},${e.latlng.lng.toFixed(6)})`;
+       // const display = document.getElementById('coordinates-display');
+        //display.innerHTML = `Right click coordinates:<br>Latitude and Longitude:(${e.latlng.lat.toFixed(6)},${e.latlng.lng.toFixed(6)})`;
         setSelectedPosition(e.latlng);
       },
     });
@@ -264,9 +264,9 @@ const AdminMap = () => {
               )}
               <RightClickDisplay />
             </MapContainer>
-            <div id="coordinates-display" className="coordinates-display">
+            {/*<div id="coordinates-display" className="coordinates-display">
               Right click on the map to see the coordinates
-            </div>
+              </div>*/}
           </div>
           
 
