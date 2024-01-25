@@ -16,7 +16,7 @@ import AdminMap from './screens/mapadd';
 import ViewAnnouncements from './screens/ViewAnnouncement'
 import EditAnnouncement from './screens/EditAnnouncement'
 import AddAnnouncement from './screens/AddAnnouncement'
-import { AuthContextProvider } from './context/AuthContext';
+
 
 import UserList from './screens/UserList';
 import AdminMapedit from './screens/mapedit';
@@ -24,7 +24,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="body">
-        <AuthContextProvider>
+       
           <Navbar />
 
 
@@ -48,7 +48,7 @@ class App extends React.Component {
             <Route path="/mapediting/:markerid" element={<AdminMapedit />} />
             <Route path="/userlist" element={<UserList />} />
           </Routes>
-        </AuthContextProvider>
+       
 
       </div>
     );
