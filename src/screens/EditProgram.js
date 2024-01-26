@@ -10,7 +10,7 @@ import CloudinaryUploadWidget from "../components/CloudinaryUpload";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
 import "../styles/App.css";
-
+import { useNavigate } from "react-router-dom";
 const EditProgram = () => {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
@@ -33,6 +33,7 @@ const EditProgram = () => {
   const [locationError, setLocationError] = useState("");
   const [keynoteSpeakerError, setKeynoteSpeakerError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
+  const navigate = useNavigate();
 
   const cld = new Cloudinary({
     cloud: {

@@ -9,6 +9,7 @@ import CloudinaryUploadWidget from "../components/CloudinaryUpload";
 import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import "../styles/App.css";
+import { useNavigate } from "react-router-dom";
 
 const AddImportantInformation = () => {
   const [title, setTitle] = useState("");
@@ -21,7 +22,7 @@ const AddImportantInformation = () => {
   const [subtitleError, setSubtitleError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);

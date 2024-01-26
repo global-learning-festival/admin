@@ -11,7 +11,7 @@ import "react-notifications/lib/notifications.css";
 import CloudinaryUploadWidget from "../components/CloudinaryUpload";
 import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
-
+import { useNavigate } from "react-router-dom";
 const EditImportantInformation = () => {
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
@@ -25,6 +25,7 @@ const EditImportantInformation = () => {
   const [subtitleError, setSubtitleError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const cld = new Cloudinary({
     cloud: {
