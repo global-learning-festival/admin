@@ -25,7 +25,7 @@ const AddManagerScreen = () => {
           console.log(response);
           if (response.data.message == "Unauthorized access") {
             localStorage.clear();
-            window.location.replace("../login");
+            wnavigate('/login')
           } else if (response.data.role !== "Admin") {
             navigate("../userlist");
           }
