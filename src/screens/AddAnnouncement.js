@@ -62,7 +62,7 @@ export default function App() {
             console.log(response);
             if (response.data.message == "Unauthorized access") {
               localStorage.clear();
-              window.location.replace("../login");
+              navigate('/login')
             }
           })
           .catch(function (response) {
