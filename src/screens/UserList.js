@@ -8,6 +8,7 @@ const UserList = () => {
   const [roles, setRoles] = useState([]);
   const [filter, setFilter] = useState("All"); // 'all', 'admin', 'event-manager', 'user'
   const [loading, setLoading] = useState(false);
+  const [mostSavedEvent, setMostSavedEvent] = useState([]); // New state for most saved event
 
   const navigate = useNavigate();
 
@@ -46,6 +47,11 @@ const UserList = () => {
 
         setRoles(rolesResponse.data);
         setUsers(usersResponse.data);
+
+        // Fetch most saved event data
+        const mostSavedEventResponse = await axios.get("http://localhost:5000/mostsavedEvent");
+        setMostSavedEvent(mostSavedEventResponse.data.rows[0]);
+        console.log("Most saved event:", mostSavedEventResponse.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -136,6 +142,14 @@ const UserList = () => {
                 ))}
             </tbody>
           </table>
+          {/* Display Most Saved Event */}
+          {mostSavedEvent && (
+  <div className="mt-4">
+    <h2 className="text-lg font-semibold mb-2">Most Saved Event:</h2>
+    <p>Title: {mostSavedEvent.title}</p>
+    <p>Saved Count: {mostSavedEvent.savedcount}</p>
+  </div>
+)}
           {/* Add Manager Button */}
           <Link to="/addmanager">
             <button className="bg-blue-500 text-white px-4 py-2 rounded-md my-2 hover:bg-blue-600">
