@@ -25,7 +25,6 @@ const AddImportantInformation = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       let token = localStorage.getItem("token");
 
       await axios({
@@ -142,7 +141,7 @@ const AddImportantInformation = () => {
         <div className="loader-container">
           <div className="spinner"></div>
         </div>
-      ) : (
+      ) : (<div></div>)}
         <div className="container mx-auto p-4">
           <h1 className="text-2xl font-bold mb-4">Add Important Information</h1>
 
@@ -241,7 +240,7 @@ const AddImportantInformation = () => {
             style={{ bottom: "0", right: "0", left: "0", top: "auto" }}
           />
         </div>
-      )}
+      
     </div>
   );
 };

@@ -74,8 +74,8 @@ export default function App() {
         );
         setEventlist(response.data);
         setLoading(false);
-
-        console.log("Event List", response.data);
+        setEvent(response.data[0].eventid)
+        console.log("Event List", event);
       } catch (error) {
         console.error("Error fetching events", error);
       }
@@ -118,7 +118,7 @@ export default function App() {
         title,
         description,
         publicId,
-        eventid: event,
+        event,
       });
       console.log("API Response:", response.data);
       return navigate("/viewannouncements");
@@ -201,7 +201,10 @@ export default function App() {
                 id="eventlist"
                 name="eventlist"
                 value={event}
-                onChange={(e) => setEvent(e.target.value)}
+                onChange={(e) => {
+                  console.log('Selected Event:', e.target.value);
+                  setEvent(e.target.value);
+                }}
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full"
               >
                 {eventlist.map((eventlisting, index) => (
