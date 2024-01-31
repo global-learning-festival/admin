@@ -342,7 +342,7 @@ const AdminMap = () => {
               <option value="">Select a location</option>
               <option value="water">Water Refill Station</option>
               <option value="register">Registration Counter</option>
-              <option value="conference">Conference Room</option>
+              <option value="conference">Convention Centre</option>
               <option value="toilet">Toilet</option>
             </select>
           </div>
