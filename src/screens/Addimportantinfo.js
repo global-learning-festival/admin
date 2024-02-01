@@ -23,6 +23,9 @@ const AddImportantInformation = () => {
   const [descriptionError, setDescriptionError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const localhostapi= "http://localhost:5000"
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
   useEffect(() => {
     const fetchData = async () => {
       let token = localStorage.getItem("token");
@@ -32,7 +35,7 @@ const AddImportantInformation = () => {
           authorization: "Bearer " + token,
         },
         method: "get",
-        url: "http://localhost:5000/validateLogin",
+        url: `${serverlessapi}/validateLogin`,
       })
         .then(function (response) {
           console.log(response);
@@ -104,7 +107,7 @@ const AddImportantInformation = () => {
 
       // Send a POST request to your API endpoint to add information
       const response = await axios.post(
-        "http://localhost:5000/importantInformation",
+        `${serverlessapi}/importantInformation`,
         {
           title,
           subtitle,

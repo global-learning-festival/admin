@@ -39,6 +39,8 @@ const AdminMap = () => {
   const [uploadPreset] = useState("jcck4okm");
   const [publicId, setPublicId] = useState("");
   const [loading, setLoading] = useState(false);
+  const localhostapi= "http://localhost:5000"
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
 
   const [uwConfig] = useState({
     cloudName,
@@ -75,7 +77,7 @@ const AdminMap = () => {
             authorization: "Bearer " + token,
           },
           method: "get",
-          url: "http://localhost:5000/validateLogin",
+          url: `${serverlessapi}/validateLogin`,
         })
           .then(function (response) {
             console.log(response);
@@ -88,7 +90,7 @@ const AdminMap = () => {
             //Handle error
             console.dir(response);
           });
-        const response = await axios.get("http://localhost:5000/markers");
+        const response = await axios.get(`${serverlessapi}/markers`);
         setMarkers(response.data);
         setLoading(false);
         console.log("Refill data:", response.data);
@@ -133,7 +135,7 @@ const AdminMap = () => {
 
   const Addlocation = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/marker", {
+      const response = await axios.post(`${serverlessapi}/marker`, {
         location_name,
         description,
         category,

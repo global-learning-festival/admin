@@ -32,6 +32,8 @@ const AdminMapedit = () => {
   const [cloudName] = useState("dxkozpx6g");
   const [uploadPreset] = useState("jcck4okm");
   const [loading, setLoading] = useState(false);
+  const localhostapi= "http://localhost:5000"
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
 
   const uwConfig = {
     cloudName,
@@ -51,7 +53,7 @@ const AdminMapedit = () => {
             authorization: "Bearer " + token,
           },
           method: "get",
-          url: "http://localhost:5000/validateLogin",
+          url: `${serverlessapi}/validateLogin`,
         })
           .then(function (response) {
             console.log(response);
@@ -66,7 +68,7 @@ const AdminMapedit = () => {
           });
         console.log("markerid", markerid);
         const response = await axios.get(
-          `http://localhost:5000/markerindiv/${markerid}`
+          `${serverlessapi}/markerindiv/${markerid}`
         );
 
         if (Array.isArray(response.data)) {
@@ -107,7 +109,7 @@ const AdminMapedit = () => {
   const updatelocation = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/marker/${markerid}`,
+        `${serverlessapi}/marker/${markerid}`,
         {
           location_name,
           description,
@@ -128,7 +130,7 @@ const AdminMapedit = () => {
   const deleteMarker = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:5000/delmarker/${markerid}`
+        `${serverlessapi}/delmarker/${markerid}`
       );
       console.log("API Response:", response.data);
       navigate(`/mapadding`);

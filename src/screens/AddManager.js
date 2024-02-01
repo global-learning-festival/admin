@@ -9,6 +9,9 @@ const AddManagerScreen = () => {
   const [type, setType] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const localhostapi= "http://localhost:5000"
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -19,7 +22,7 @@ const AddManagerScreen = () => {
           authorization: "Bearer " + token,
         },
         method: "get",
-        url: "http://localhost:5000/validateLogin",
+        url: `${serverlessapi}/validateLogin`,
       })
         .then(function (response) {
           console.log(response);
@@ -43,7 +46,7 @@ const AddManagerScreen = () => {
     try {
       setLoading(true);
       // Send a POST request to the API to add a new manager
-      const response = await axios.post("http://localhost:5000/addadmin", {
+      const response = await axios.post(`${serverlessapi}/addadmin`, {
         username,
         password,
         type,

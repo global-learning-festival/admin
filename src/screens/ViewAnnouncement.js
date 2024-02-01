@@ -46,6 +46,8 @@ const Announcement = ({
 const AnnouncementList = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(false);
+  const localhostapi= "http://localhost:5000"
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -59,7 +61,7 @@ const AnnouncementList = () => {
             authorization: "Bearer " + token,
           },
           method: "get",
-          url: "http://localhost:5000/validateLogin",
+          url: `${serverlessapi}/validateLogin`,
         })
           .then(function (response) {
             console.log(response);
@@ -72,7 +74,7 @@ const AnnouncementList = () => {
             //Handle error
             console.dir(response);
           });
-        const response = await axios.get("http://localhost:5000/announcements");
+        const response = await axios.get(`${serverlessapi}/announcements`);
         setAnnouncements(response.data);
         setLoading(false);
       } catch (error) {
