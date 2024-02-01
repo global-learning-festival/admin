@@ -175,7 +175,40 @@ const EditProgram = () => {
       setTitleError("");
     }
 
-    // (rest of your validation logic)
+    if (time_start.trim() === "") {
+      setTimeStartError("Please choose a start date and time");
+      isValid = false;
+    } else {
+      setTimeStartError("");
+    }
+
+    if (time_end.trim() === "") {
+      setTimeEndError("Please choose an end date and time");
+      isValid = false;
+    } else {
+      setTimeEndError("");
+    }
+
+    if (location.trim() === "") {
+      setLocationError("Please enter a location");
+      isValid = false;
+    } else {
+      setLocationError("");
+    }
+
+    if (keynote_speaker.trim() === "") {
+      setKeynoteSpeakerError("Please enter a keynote speaker");
+      isValid = false;
+    } else {
+      setKeynoteSpeakerError("");
+    }
+
+    if (description.trim() === "") {
+      setDescriptionError("Please enter a description");
+      isValid = false;
+    } else {
+      setDescriptionError("");
+    }
 
     return isValid;
   };
