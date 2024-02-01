@@ -34,6 +34,9 @@ const AdminMap = () => {
   const [location_name, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const [locationNameError, setLocationNameError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+  const [categoryError, setCategoryError] = useState("");
   const navigate = useNavigate();
   const [cloudName] = useState("dxkozpx6g");
   const [uploadPreset] = useState("jcck4okm");
@@ -77,7 +80,7 @@ const AdminMap = () => {
             authorization: "Bearer " + token,
           },
           method: "get",
-          url: `${serverlessapi}/validateLogin`,
+          url: `${localhostapi}/validateLogin`,
         })
           .then(function (response) {
             console.log(response);
@@ -90,7 +93,7 @@ const AdminMap = () => {
             //Handle error
             console.dir(response);
           });
-        const response = await axios.get(`${serverlessapi}/markers`);
+        const response = await axios.get(`${localhostapi}/markers`);
         setMarkers(response.data);
         setLoading(false);
         console.log("Refill data:", response.data);
@@ -135,7 +138,27 @@ const AdminMap = () => {
 
   const Addlocation = async () => {
     try {
-      const response = await axios.post(`${serverlessapi}/marker`, {
+      // Reset previous error messages
+      setLocationNameError("");
+      setDescriptionError("");
+      setCategoryError("");
+
+      // Input validation
+      if (!location_name.trim()) {
+        setLocationNameError("Location Name is required");
+        return;
+      }
+
+      if (!description.trim()) {
+        setDescriptionError("Description is required");
+        return;
+      }
+
+      if (!category) {
+        setCategoryError("Category is required");
+        return;
+      }
+      const response = await axios.post(`${localhostapi}/marker`, {
         location_name,
         description,
         category,
@@ -275,8 +298,13 @@ const AdminMap = () => {
               name="Location_name"
               value={location_name}
               onChange={(e) => setLocation(e.target.value)}
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              className={`mt-1 p-2 border rounded-md w-full ${
+                locationNameError ? "border-red-500" : "border-gray-300"
+              }`}
             />
+            {locationNameError && (
+              <p className="text-red-500 text-xs mt-1">{locationNameError}</p>
+            )}
           </div>
 
           <div className="mb-4">
@@ -292,8 +320,13 @@ const AdminMap = () => {
               rows="4"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              className={`mt-1 p-2 border rounded-md w-full ${
+                descriptionError ? "border-red-500" : "border-gray-300"
+              }`}
             ></textarea>
+            {descriptionError && (
+              <p className="text-red-500 text-xs mt-1">{descriptionError}</p>
+            )}
           </div>
 
           <div className="mb-4">
@@ -332,14 +365,16 @@ const AdminMap = () => {
               htmlFor="location"
               className="block text-sm font-medium text-gray-600"
             >
-              category
+              Category
             </label>
             <select
               id="location"
               name="location"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              className={`mt-1 p-2 border rounded-md w-full ${
+                categoryError ? "border-red-500" : "border-gray-300"
+              }`}
             >
               <option value="">Select a location</option>
               <option value="water">Water Refill Station</option>
@@ -347,6 +382,9 @@ const AdminMap = () => {
               <option value="conference">Convention Centre</option>
               <option value="toilet">Toilet</option>
             </select>
+            {categoryError && (
+              <p className="text-red-500 text-xs mt-1">{categoryError}</p>
+            )}
           </div>
           <div className="mb-4">
             <label
