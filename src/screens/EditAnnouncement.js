@@ -21,6 +21,9 @@ const EditAnnouncement = () => {
   const [descriptionError, setDescriptionError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const localhostapi= "http://localhost:5000"
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
+
   const navigate = useNavigate();
   const cld = new Cloudinary({
     cloud: {
@@ -47,7 +50,7 @@ const EditAnnouncement = () => {
             authorization: "Bearer " + token,
           },
           method: "get",
-          url: "http://localhost:5000/validateLogin",
+          url: `${serverlessapi}/validateLogin`,
         })
           .then(function (response) {
             console.log(response);
@@ -61,11 +64,11 @@ const EditAnnouncement = () => {
             console.dir(response);
           });
         const response1 = await axios.get(
-          "http://localhost:5000/eventsannouncement"
+          `${serverlessapi}/eventsannouncement`
         );
         setEventlist(response1.data);
         const response = await axios.get(
-          `http://localhost:5000/announcements/${announcementid}`
+          `${serverlessapi}/announcements/${announcementid}`
         );
         setAnnouncementData(response.data);
         // Check if the response data is an array and set infodata accordingly
@@ -123,7 +126,7 @@ const EditAnnouncement = () => {
       setLoading(true);
 
       const response = await axios.put(
-        `http://localhost:5000/announcements/${announcementid}`,
+        `${serverlessapi}/announcements/${announcementid}`,
         {
           title,
           description,
@@ -141,7 +144,7 @@ const EditAnnouncement = () => {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:5000/announcements/${announcementid}`
+        `${serverlessapi}/announcements/${announcementid}`
       );
       console.log("API Response:", response.data);
       return navigate("/viewannouncements");

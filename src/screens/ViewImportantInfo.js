@@ -25,6 +25,8 @@ const ImportantInfoList = () => {
   const [selectedInfo, setSelectedInfo] = useState(null);
   const navigate = useNavigate(); // Add this line
   const [loading, setLoading] = useState(false);
+  const localhostapi= "http://localhost:5000"
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
 
   useEffect(() => {
     const fetchImportantInformation = async () => {
@@ -37,7 +39,7 @@ const ImportantInfoList = () => {
             authorization: "Bearer " + token,
           },
           method: "get",
-          url: "http://localhost:5000/validateLogin",
+          url: `${serverlessapi}/validateLogin`,
         })
           .then(function (response) {
             console.log(response);
@@ -51,7 +53,7 @@ const ImportantInfoList = () => {
             console.dir(response);
           });
         const response = await axios.get(
-          "http://localhost:5000/importantInformation"
+          `${serverlessapi}/importantInformation`
         );
         setImportantInformation(response.data);
         setLoading(false);

@@ -18,6 +18,8 @@ export default function App() {
   const [descriptionError, setDescriptionError] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const localhostapi= "http://localhost:5000"
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
 
   const [uwConfig] = useState({
     cloudName,
@@ -56,7 +58,7 @@ export default function App() {
             authorization: "Bearer " + token,
           },
           method: "get",
-          url: "http://localhost:5000/validateLogin",
+          url: `${serverlessapi}/validateLogin`,
         })
           .then(function (response) {
             console.log(response);
@@ -70,7 +72,7 @@ export default function App() {
             console.dir(response);
           });
         const response = await axios.get(
-          "http://localhost:5000/eventsannouncement"
+          `${serverlessapi}/eventsannouncement`
         );
         setEventlist(response.data);
         setLoading(false);
@@ -114,7 +116,7 @@ export default function App() {
 
     try {
       console.log(publicId);
-      const response = await axios.post(`http://localhost:5000/announcement`, {
+      const response = await axios.post(`${serverlessapi}/announcement`, {
         title,
         description,
         publicId,

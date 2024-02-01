@@ -9,7 +9,8 @@ const UserList = () => {
   const [filter, setFilter] = useState("All"); // 'all', 'admin', 'event-manager', 'user'
   const [loading, setLoading] = useState(false);
   const [mostSavedEvent, setMostSavedEvent] = useState([]); // New state for most saved event
-
+  const localhostapi= "http://localhost:5000"
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const UserList = () => {
             authorization: "Bearer " + token,
           },
           method: "get",
-          url: "http://localhost:5000/validateLogin",
+          url: `${serverlessapi}/validateLogin`,
         })
           .then(function (response) {
             console.log("Test", response.data);
@@ -36,11 +37,11 @@ const UserList = () => {
             //Handle error
             console.dir(response);
           });
-        const response = await axios.get("http://localhost:5000/users");
+        const response = await axios.get(`${serverlessapi}/users`);
         setUsers(response.data);
 
-        const rolesResponse = await axios.get("http://localhost:5000/roles");
-        const usersResponse = await axios.get("http://localhost:5000/users");
+        const rolesResponse = await axios.get(`${serverlessapi}/roles`);
+        const usersResponse = await axios.get(`${serverlessapi}/users`);
 
         console.log("Roles data:", rolesResponse.data);
         console.log("Users data:", usersResponse.data);
@@ -49,7 +50,7 @@ const UserList = () => {
         setUsers(usersResponse.data);
 
         // Fetch most saved event data
-        const mostSavedEventResponse = await axios.get("http://localhost:5000/mostsavedEvent");
+        const mostSavedEventResponse = await axios.get(`${serverlessapi}/mostsavedEvent`);
         setMostSavedEvent(mostSavedEventResponse.data.rows[0]);
         console.log("Most saved event:", mostSavedEventResponse.data);
       } catch (error) {

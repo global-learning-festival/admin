@@ -26,6 +26,9 @@ const EditImportantInformation = () => {
   const [descriptionError, setDescriptionError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const localhostapi= "http://localhost:5000"
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
+
 
   const cld = new Cloudinary({
     cloud: {
@@ -55,7 +58,7 @@ const EditImportantInformation = () => {
             authorization: "Bearer " + token,
           },
           method: "get",
-          url: "http://localhost:5000/validateLogin",
+          url: `${serverlessapi}/validateLogin`,
         })
           .then(function (response) {
             console.log(response);
@@ -69,7 +72,7 @@ const EditImportantInformation = () => {
             console.dir(response);
           });
         const response = await axios.get(
-          `http://localhost:5000/info/${infoid}`
+          `${serverlessapi}/info/${infoid}`
         );
 
         // Check if the response data is an array and set infodata accordingly
@@ -124,7 +127,7 @@ const EditImportantInformation = () => {
       setLoading(true);
 
       const response = await axios.put(
-        `http://localhost:5000/importantinfo/${infoid}`,
+        `${serverlessapi}/importantinfo/${infoid}`,
         {
           title,
           subtitle,
@@ -150,7 +153,7 @@ const EditImportantInformation = () => {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:5000/delete/${infoid}`
+        `${serverlessapi}/delete/${infoid}`
       );
       console.log("API Response:", response.data);
 

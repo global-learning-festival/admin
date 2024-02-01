@@ -31,6 +31,8 @@ const AddProgramPage = () => {
   const [descriptionError, setDescriptionError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const localhostapi= "http://localhost:5000"
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
 
   const cld = new Cloudinary({
     cloud: {
@@ -53,7 +55,7 @@ const AddProgramPage = () => {
           authorization: "Bearer " + token,
         },
         method: "get",
-        url: "http://localhost:5000/validateLogin",
+        url: `${serverlessapi}/validateLogin`,
       })
         .then(function (response) {
           console.log(response);
@@ -86,7 +88,7 @@ const AddProgramPage = () => {
     try {
       setLoading(true);
 
-      const response = await axios.post("http://localhost:5000/events", {
+      const response = await axios.post(`${serverlessapi}/events`, {
         title,
         publicId,
         time_start,

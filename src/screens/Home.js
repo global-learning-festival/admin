@@ -44,6 +44,8 @@ const EventsList = () => {
   const [events, setEvents] = useState([]);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const localhostapi= "http://localhost:5000"
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -56,7 +58,7 @@ const EventsList = () => {
             authorization: "Bearer " + token,
           },
           method: "get",
-          url: "http://localhost:5000/validateLogin",
+          url: `${serverlessapi}/validateLogin`,
         })
           .then(function (response) {
             console.log(response);
@@ -70,7 +72,7 @@ const EventsList = () => {
             //Handle error
             console.dir(response);
           });
-        const response = await axios.get("http://localhost:5000/events");
+        const response = await axios.get(`${serverlessapi}/events`);
         setEvents(response.data);
         setLoading(false);
       } catch (error) {

@@ -7,7 +7,8 @@ const AdminLoginScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const localhostapi= "http://localhost:5000"
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -15,7 +16,7 @@ const AdminLoginScreen = () => {
       setLoading(true);
 
       // Send a POST request to your authentication endpoint
-      const response = await axios.post("http://localhost:5000/login", {
+      const response = await axios.post(`${serverlessapi}/login`, {
         username,
         password,
       });

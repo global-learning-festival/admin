@@ -34,6 +34,8 @@ const EditProgram = () => {
   const [keynoteSpeakerError, setKeynoteSpeakerError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const navigate = useNavigate();
+  const localhostapi= "http://localhost:5000"
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
 
   const cld = new Cloudinary({
     cloud: {
@@ -58,7 +60,7 @@ const EditProgram = () => {
             authorization: "Bearer " + token,
           },
           method: "get",
-          url: "http://localhost:5000/validateLogin",
+          url: `${serverlessapi}/validateLogin`,
         })
           .then(function (response) {
             console.log(response);
@@ -73,7 +75,7 @@ const EditProgram = () => {
           });
 
         const response = await axios.get(
-          `http://localhost:5000/events/${eventid}`
+          `${serverlessapi}/events/${eventid}`
         );
 
         // Check if the response data is an array and set programData accordingly
@@ -118,7 +120,7 @@ const EditProgram = () => {
       setLoading(true);
 
       const response = await axios.put(
-        `http://localhost:5000/events/${eventid}`,
+        `${serverlessapi}/events/${eventid}`,
         {
           title,
           publicId,
@@ -147,7 +149,7 @@ const EditProgram = () => {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:5000/deleteevent/${eventid}`
+        `${serverlessapi}/deleteevent/${eventid}`
       );
       console.log("API Response:", response.data);
 
