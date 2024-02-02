@@ -14,7 +14,7 @@ const AddManagerScreen = () => {
   const navigate = useNavigate();
 
   const localhostapi= "http://localhost:5000"
-  const serverlessapi = "https://adminilftest.onrender.com";
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);

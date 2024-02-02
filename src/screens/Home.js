@@ -45,7 +45,7 @@ const EventsList = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const localhostapi= "http://localhost:5000"
-  const serverlessapi = "https://adminilftest.onrender.com";
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
 
   useEffect(() => {
     const fetchEvents = async () => {

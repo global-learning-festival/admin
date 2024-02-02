@@ -26,7 +26,7 @@ const ImportantInfoList = () => {
   const navigate = useNavigate(); // Add this line
   const [loading, setLoading] = useState(false);
   const localhostapi= "http://localhost:5000"
-  const serverlessapi = "https://adminilftest.onrender.com";
+  const serverlessapi = "https://fyp-9bxz.onrender.com";
 
   useEffect(() => {
     const fetchImportantInformation = async () => {
