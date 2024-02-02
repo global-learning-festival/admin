@@ -25,6 +25,9 @@ const AdminMapedit = () => {
   const [location_name, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const [locationNameError, setLocationNameError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+  const [categoryError, setCategoryError] = useState("");
   const { markerid } = useParams();
   console.log("useparams", markerid);
   const navigate = useNavigate(); // Add this line
@@ -53,7 +56,7 @@ const AdminMapedit = () => {
             authorization: "Bearer " + token,
           },
           method: "get",
-          url: `${serverlessapi}/validateLogin`,
+          url: `${localhostapi}/validateLogin`,
         })
           .then(function (response) {
             console.log(response);
@@ -68,7 +71,7 @@ const AdminMapedit = () => {
           });
         console.log("markerid", markerid);
         const response = await axios.get(
-          `${serverlessapi}/markerindiv/${markerid}`
+          `${localhostapi}/markerindiv/${markerid}`
         );
 
         if (Array.isArray(response.data)) {
@@ -108,8 +111,28 @@ const AdminMapedit = () => {
 
   const updatelocation = async () => {
     try {
+      // Reset previous error messages
+      setLocationNameError("");
+      setDescriptionError("");
+      setCategoryError("");
+
+      // Input validation
+      if (!location_name.trim()) {
+        setLocationNameError("Location Name is required");
+        return;
+      }
+
+      if (!description.trim()) {
+        setDescriptionError("Description is required");
+        return;
+      }
+
+      if (!category) {
+        setCategoryError("Category is required");
+        return;
+      }
       const response = await axios.put(
-        `${serverlessapi}/marker/${markerid}`,
+        `${localhostapi}/marker/${markerid}`,
         {
           location_name,
           description,
@@ -130,7 +153,7 @@ const AdminMapedit = () => {
   const deleteMarker = async () => {
     try {
       const response = await axios.delete(
-        `${serverlessapi}/delmarker/${markerid}`
+        `${localhostapi}/delmarker/${markerid}`
       );
       console.log("API Response:", response.data);
       navigate(`/mapadding`);
@@ -244,8 +267,13 @@ const AdminMapedit = () => {
                 name="Location_name"
                 value={location_name}
                 onChange={(e) => setLocation(e.target.value)}
-                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                className={`mt-1 p-2 border rounded-md w-full ${
+                  locationNameError ? "border-red-500" : "border-gray-300"
+                }`}
               />
+              {locationNameError && (
+                <p className="text-red-500 text-xs mt-1">{locationNameError}</p>
+              )}
             </div>
 
             <div className="mb-4">
@@ -261,8 +289,13 @@ const AdminMapedit = () => {
                 rows="4"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                className={`mt-1 p-2 border rounded-md w-full ${
+                  descriptionError ? "border-red-500" : "border-gray-300"
+                }`}
               ></textarea>
+              {descriptionError && (
+                <p className="text-red-500 text-xs mt-1">{descriptionError}</p>
+              )}
             </div>
 
             <div className="mb-4">
@@ -304,7 +337,9 @@ const AdminMapedit = () => {
                 name="location"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                className={`mt-1 p-2 border rounded-md w-full ${
+                  categoryError ? "border-red-500" : "border-gray-300"
+                }`}
               >
                 <option value="">Select a location</option>
                 <option value="water">Water Refill Station</option>
@@ -312,6 +347,9 @@ const AdminMapedit = () => {
                 <option value="conference">Conference Room</option>
                 <option value="toilet">Toilet</option>
               </select>
+              {categoryError && (
+                <p className="text-red-500 text-xs mt-1">{categoryError}</p>
+              )}
             </div>
 
             <button
