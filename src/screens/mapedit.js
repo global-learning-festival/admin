@@ -56,7 +56,7 @@ const AdminMapedit = () => {
             authorization: "Bearer " + token,
           },
           method: "get",
-          url: `${localhostapi}/validateLogin`,
+          url: `${serverlessapi}/validateLogin`,
         })
           .then(function (response) {
             console.log(response);
@@ -71,7 +71,7 @@ const AdminMapedit = () => {
           });
         console.log("markerid", markerid);
         const response = await axios.get(
-          `${localhostapi}/markerindiv/${markerid}`
+          `${serverlessapi}/markerindiv/${markerid}`
         );
 
         if (Array.isArray(response.data)) {
@@ -132,7 +132,7 @@ const AdminMapedit = () => {
         return;
       }
       const response = await axios.put(
-        `${localhostapi}/marker/${markerid}`,
+        `${serverlessapi}/marker/${markerid}`,
         {
           location_name,
           description,
@@ -153,7 +153,7 @@ const AdminMapedit = () => {
   const deleteMarker = async () => {
     try {
       const response = await axios.delete(
-        `${localhostapi}/delmarker/${markerid}`
+        `${serverlessapi}/delmarker/${markerid}`
       );
       console.log("API Response:", response.data);
       navigate(`/mapadding`);

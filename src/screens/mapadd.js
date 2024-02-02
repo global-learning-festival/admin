@@ -80,7 +80,7 @@ const AdminMap = () => {
             authorization: "Bearer " + token,
           },
           method: "get",
-          url: `${localhostapi}/validateLogin`,
+          url: `${serverlessapi}/validateLogin`,
         })
           .then(function (response) {
             console.log(response);
@@ -93,7 +93,7 @@ const AdminMap = () => {
             //Handle error
             console.dir(response);
           });
-        const response = await axios.get(`${localhostapi}/markers`);
+        const response = await axios.get(`${serverlessapi}/markers`);
         setMarkers(response.data);
         setLoading(false);
         console.log("Refill data:", response.data);
@@ -158,7 +158,7 @@ const AdminMap = () => {
         setCategoryError("Category is required");
         return;
       }
-      const response = await axios.post(`${localhostapi}/marker`, {
+      const response = await axios.post(`${serverlessapi}/marker`, {
         location_name,
         description,
         category,

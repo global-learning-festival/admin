@@ -25,7 +25,7 @@ const AddManagerScreen = () => {
           authorization: "Bearer " + token,
         },
         method: "get",
-        url: `${localhostapi}/validateLogin`,
+        url: `${serverlessapi}/validateLogin`,
       })
         .then(function (response) {
           console.log(response);
@@ -71,7 +71,7 @@ const AddManagerScreen = () => {
       setLoading(true);
 
       // Send a POST request to the API to add a new manager
-      const response = await axios.post(`${localhostapi}/addadmin`, {
+      const response = await axios.post(`${serverlessapi}/addadmin`, {
         username,
         password,
         type,
