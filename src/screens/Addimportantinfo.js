@@ -118,7 +118,7 @@ const AddImportantInformation = () => {
 
       // Handle the response as needed
       console.log("Added Information:", response.data);
-
+        navigate('/viewimportantinfo')
       // Show success notification
       NotificationManager.success("Important information added successfully");
 
@@ -128,13 +128,46 @@ const AddImportantInformation = () => {
       setDescription("");
 
       // Auto-refresh the page after a short delay (you can adjust the delay as needed)
-      setTimeout(() => {
-        window.location.replace("/viewimportantinfo");
-      }, 600);
+      // setTimeout(() => {
+      //   window.location.replace("/viewimportantinfo");
+      // }, 600);
     } catch (error) {
       console.error("Error adding information:", error);
       // Show error notification
       NotificationManager.error("Error adding important information");
+    }
+  };
+
+  const handleTitleChange = (e) => {
+    const inputValue = e.target.value;
+
+    if (inputValue.length <= 255) {
+      setTitle(inputValue);
+      setTitleError('');
+    } else {
+      setTitleError('Title must be 255 characters or less');
+    }
+  };
+
+  const handleSubtitleChange = (e) => {
+    const inputValue = e.target.value;
+
+    if (inputValue.length <= 255) {
+      setSubtitle(inputValue);
+      setSubtitleError('');
+    } else {
+      setSubtitleError('Subtitle must be 255 characters or less');
+    }
+  };
+
+  const handleDescriptionChange = (e) => {
+    const inputValue = e.target.value;
+
+    if (inputValue.length <= 999) {
+      setDescription(inputValue);
+      setDescriptionError('');
+    } else {
+      setDescriptionError('Description must be 999 characters or less');
     }
   };
 
@@ -149,70 +182,81 @@ const AddImportantInformation = () => {
           <h1 className="text-2xl font-bold mb-4">Add Important Information</h1>
 
           <div id="form" className="mb-4">
-            <label
-              htmlFor="title"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Title
-            </label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className={`mt-1 p-2 border rounded-md w-full ${
-                titleError ? "border-red-500" : "border-gray-300"
-              }`}
-            />
-            {titleError && (
-              <p className="text-red-500 text-xs mt-1">{titleError}</p>
-            )}
-          </div>
+      <label
+        htmlFor="title"
+        className="block text-sm font-medium text-gray-600"
+      >
+        Title
+      </label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        value={title}
+        onChange={handleTitleChange}
+        className={`mt-1 p-2 border rounded-md w-full ${
+          titleError ? 'border-red-500' : 'border-gray-300'
+        }`}
+      />
+      {titleError && (
+        <p className="text-red-500 text-xs mt-1">{titleError}</p>
+      )}
+      <p className="text-gray-500 text-xs mt-1">
+        Character Limit: {title.length} / 255
+      </p>
+    </div>
 
-          <div className="mb-4">
-            <label
-              htmlFor="subtitle"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Subtitle
-            </label>
-            <input
-              type="text"
-              id="subtitle"
-              name="subtitle"
-              value={subtitle}
-              onChange={(e) => setSubtitle(e.target.value)}
-              className={`mt-1 p-2 border rounded-md w-full  ${
-                subtitleError ? "border-red-500" : "border-gray-300"
-              }`}
-            />
-            {subtitleError && (
-              <p className="text-red-500 text-xs mt-1">{subtitleError}</p>
-            )}
-          </div>
+    <div className="mb-4">
+      <label
+        htmlFor="subtitle"
+        className="block text-sm font-medium text-gray-600"
+      >
+        Subtitle
+      </label>
+      <input
+        type="text"
+        id="subtitle"
+        name="subtitle"
+        value={subtitle}
+        onChange={handleSubtitleChange}
+        className={`mt-1 p-2 border rounded-md w-full ${
+          subtitleError ? 'border-red-500' : 'border-gray-300'
+        }`}
+      />
+      {subtitleError && (
+        <p className="text-red-500 text-xs mt-1">{subtitleError}</p>
+      )}
+      <p className="text-gray-500 text-xs mt-1">
+        Character Limit: { subtitle.length} / 255
+      </p>
+    </div>
 
-          <div className="mb-4">
-            <label
-              htmlFor="description"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Description
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              rows="4"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className={`mt-1 p-2 border rounded-md w-full ${
-                descriptionError ? "border-red-500" : "border-gray-300"
-              }`}
-            ></textarea>
-            {descriptionError && (
-              <p className="text-red-500 text-xs mt-1">{descriptionError}</p>
-            )}
-          </div>
+    <div className="mb-4">
+      <label
+        htmlFor="description"
+        className="block text-sm font-medium text-gray-600"
+      >
+        Description
+      </label>
+      <textarea
+        id="description"
+        name="description"
+        rows="4"
+        value={description}
+        onChange={handleDescriptionChange}
+        className={`mt-1 p-2 border rounded-md w-full ${
+          descriptionError ? 'border-red-500' : 'border-gray-300'
+        }`}
+      ></textarea>
+      {descriptionError && (
+        <p className="text-red-500 text-xs mt-1">{descriptionError}</p>
+      )}
+      <p className="text-gray-500 text-xs mt-1">
+        Character Limit: { description.length} / 999
+      </p>
+    </div>
+
+
           <div className="mb-4">
             <label
               htmlFor="cloudinary"

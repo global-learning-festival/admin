@@ -153,6 +153,29 @@ const EditAnnouncement = () => {
     }
   };
 
+  const handleTitleChange = (e) => {
+    const inputValue = e.target.value;
+
+    if (inputValue.length <= 255) {
+      setTitle(inputValue);
+      setTitleError('');
+    } else {
+      setTitleError('Title must be 255 characters or less');
+    }
+  };
+
+
+
+  const handleDescriptionChange = (e) => {
+    const inputValue = e.target.value;
+
+    if (inputValue.length <= 255) {
+      setDescription(inputValue);
+      setDescriptionError('');
+    } else {
+      setDescriptionError('Description must be 255 characters or less');
+    }
+  };
   return (
     <div>
       {loading ? (
@@ -179,51 +202,55 @@ const EditAnnouncement = () => {
             </div>
             <h1 className="text-2xl font-bold mb-4">Edit Announcements</h1>
             <form onSubmit={handleEdit}>
-              <div className="mb-4">
-                <label
-                  htmlFor="title"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Title
-                </label>
-                <input
-                  type="text"
-                  id="title"
-                  name="title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className={`mt-1 p-2 border ${
-                    titleError ? "border-red-500" : "border-gray-300"
-                  } rounded-md w-full`}
-                />
-                {titleError && (
-                  <p className="text-red-500 text-xs mt-1">{titleError}</p>
-                )}
-              </div>
+            <div className="mb-4">
+      <label
+        htmlFor="title"
+        className="block text-sm font-medium text-gray-600"
+      >
+        Title
+      </label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        value={title}
+        onChange={handleTitleChange}
+        className={`mt-1 p-2 border ${
+          titleError ? 'border-red-500' : 'border-gray-300'
+        } rounded-md w-full`}
+      />
+      {titleError && (
+        <p className="text-red-500 text-xs mt-1">{titleError}</p>
+      )}
+      <p className="text-gray-500 text-xs mt-1">
+        Character Limit: {title.length} / 255
+      </p>
+    </div>
 
-              <div className="mb-4">
-                <label
-                  htmlFor="description"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Description
-                </label>
-                <textarea
-                  id="description"
-                  name="description"
-                  rows="4"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className={`mt-1 p-2 border ${
-                    descriptionError ? "border-red-500" : "border-gray-300"
-                  } rounded-md w-full`}
-                ></textarea>
-                {descriptionError && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {descriptionError}
-                  </p>
-                )}
-              </div>
+    <div className="mb-4">
+      <label
+        htmlFor="description"
+        className="block text-sm font-medium text-gray-600"
+      >
+        Description
+      </label>
+      <textarea
+        id="description"
+        name="description"
+        rows="4"
+        value={description}
+        onChange={handleDescriptionChange}
+        className={`mt-1 p-2 border ${
+          descriptionError ? 'border-red-500' : 'border-gray-300'
+        } rounded-md w-full`}
+      ></textarea>
+      {descriptionError && (
+        <p className="text-red-500 text-xs mt-1">{descriptionError}</p>
+      )}
+      <p className="text-gray-500 text-xs mt-1">
+        Character Limit: { description.length} / 255
+      </p>
+    </div>
               <label
                 htmlFor="eventlist"
                 className="block text-sm font-medium text-gray-600"
