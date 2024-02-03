@@ -26,6 +26,9 @@ import { useNavigate } from "react-router-dom";
 import CloudinaryUploadWidget from "../components/CloudinaryUpload";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
+import starbucks1 from '../assets/marker/starbucks.png'
+import mcdonalds from '../assets/marker/mcodnald.png'
+import foodcourt from '../assets/marker/foodcourt.png'
 
 const AdminMap = () => {
   const position = [1.310411032362568, 103.77767848691333];
@@ -217,28 +220,47 @@ const AdminMap = () => {
 
           {markers.map((markerlocation) => {
             let iconUrl;
+            let iconSize;
+
             switch (markerlocation.category) {
-              case "water":
-                iconUrl = waterMarker;
+              case 'water':
+              iconUrl = waterMarker;
+              iconSize = [18, 29];
+              break;
+            case 'register':
+              iconUrl = registerMarker;
+              iconSize = [18, 29];
+              break;
+            case 'conference':
+              iconUrl = conferenceMarker;
+              iconSize = [18, 29];
+              break;
+            case 'toilet':
+              iconUrl = toiletMarker;
+              iconSize = [18, 29];
+              break;
+            case 'sbux':
+              iconUrl = starbucks1;
+              iconSize = [30, 29]; // Set different size for 'sbux'
+              break;
+            case 'mcd':
+              iconUrl = mcdonalds;
+              iconSize = [30, 29]; // Set different size for 'mcd'
+              break;
+            case 'fc':
+                iconUrl = foodcourt;
+                iconSize = [40, 40]; // Set different size for 'mcd'
                 break;
-              case "register":
-                iconUrl = registerMarker;
-                break;
-              case "conference":
-                iconUrl = conferenceMarker;
-                break;
-              case "toilet":
-                iconUrl = toiletMarker;
-                break;
-              default:
-                iconUrl = waterMarker;
+            default:
+              iconUrl = waterMarker;
+              iconSize = [18, 29];
             }
 
             const customIcon = L.icon({
               iconUrl: iconUrl,
-              iconSize: [18, 29],
-              iconAnchor: [16, 32],
-              popupAnchor: [0, -32],
+            iconSize: iconSize,
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32],
             });
 
             const coordinates1 = markerlocation.coordinates
