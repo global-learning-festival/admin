@@ -319,6 +319,32 @@ const AdminMapedit = () => {
                 <p className="text-red-500 text-xs mt-1">{descriptionError}</p>
               )}
             </div>
+            <div className="mb-4">
+              <label
+                htmlFor="location"
+                className="block text-sm font-medium text-gray-600"
+              >
+                Category
+              </label>
+              <select
+                id="location"
+                name="location"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className={`mt-1 p-2 border rounded-md w-full ${
+                  categoryError ? "border-red-500" : "border-gray-300"
+                }`}
+              >
+                <option value="">Select a location</option>
+                <option value="water">Water Refill Station</option>
+                <option value="register">Registration Counter</option>
+                <option value="conference">Conference Room</option>
+                <option value="toilet">Toilet</option>
+              </select>
+              {categoryError && (
+                <p className="text-red-500 text-xs mt-1">{categoryError}</p>
+              )}
+            </div>
 
             <div className="mb-4">
               <label
@@ -347,32 +373,7 @@ const AdminMapedit = () => {
               </div>
             </div>
 
-            <div className="mb-4">
-              <label
-                htmlFor="location"
-                className="block text-sm font-medium text-gray-600"
-              >
-                Category
-              </label>
-              <select
-                id="location"
-                name="location"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className={`mt-1 p-2 border rounded-md w-full ${
-                  categoryError ? "border-red-500" : "border-gray-300"
-                }`}
-              >
-                <option value="">Select a location</option>
-                <option value="water">Water Refill Station</option>
-                <option value="register">Registration Counter</option>
-                <option value="conference">Conference Room</option>
-                <option value="toilet">Toilet</option>
-              </select>
-              {categoryError && (
-                <p className="text-red-500 text-xs mt-1">{categoryError}</p>
-              )}
-            </div>
+            
 
             <button
               onClick={updatelocation}
