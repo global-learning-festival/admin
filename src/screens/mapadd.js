@@ -180,10 +180,7 @@ const AdminMap = () => {
         return;
       }
 
-      if (!category) {
-        setCategoryError("Category is required");
-        return;
-      }
+      
       const response = await axios.post(`${serverlessapi}/marker`, {
         location_name,
         description,
