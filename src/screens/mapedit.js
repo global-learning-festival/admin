@@ -20,6 +20,7 @@ import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
 import starbucks1 from '../assets/marker/starbucks.png'
 import mcdonalds from '../assets/marker/mcodnald.png'
 import foodcourt from '../assets/marker/foodcourt.png'
+import default1 from '../assets/marker/default.png'
 
 const AdminMapedit = () => {
   const position = [1.310411032362568, 103.77767848691333];
@@ -250,7 +251,7 @@ const AdminMapedit = () => {
                 iconSize = [40, 40]; // Set different size for 'mcd'
                 break;
             default:
-              iconUrl = waterMarker;
+              iconUrl = default1;
               iconSize = [18, 29];
             }
 
