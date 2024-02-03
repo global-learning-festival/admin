@@ -139,6 +139,28 @@ const AdminMap = () => {
     // Redirect to the specified route
   };
 
+  const handleLocationChange = (e) => {
+    const inputValue = e.target.value;
+
+    if (inputValue.length <= 255) {
+      setLocation(inputValue);
+      setLocationNameError('');
+    } else {
+      setLocationNameError('Location name must be 255 characters or less');
+    }
+  };
+
+  const handleDescriptionChange = (e) => {
+    const inputValue = e.target.value;
+
+    if (inputValue.length <= 255) {
+      setDescription(inputValue);
+      setDescriptionError('');
+    } else {
+      setDescriptionError('Description must be 255 characters or less');
+    }
+  };
+
   const Addlocation = async () => {
     try {
       // Reset previous error messages
@@ -308,48 +330,54 @@ const AdminMap = () => {
           <h1 className="text-2xl font-bold mb-4">Add Marker</h1>
 
           <div className="mb-4">
-            <label
-              htmlFor="Location_name"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Location Name
-            </label>
-            <input
-              type="text"
-              id="Location_name"
-              name="Location_name"
-              value={location_name}
-              onChange={(e) => setLocation(e.target.value)}
-              className={`mt-1 p-2 border rounded-md w-full ${
-                locationNameError ? "border-red-500" : "border-gray-300"
-              }`}
-            />
-            {locationNameError && (
-              <p className="text-red-500 text-xs mt-1">{locationNameError}</p>
-            )}
-          </div>
+      <label
+        htmlFor="Location_name"
+        className="block text-sm font-medium text-gray-600"
+      >
+        Location Name
+      </label>
+      <input
+        type="text"
+        id="Location_name"
+        name="Location_name"
+        value={location_name}
+        onChange={handleLocationChange}
+        className={`mt-1 p-2 border rounded-md w-full ${
+          locationNameError ? 'border-red-500' : 'border-gray-300'
+        }`}
+      />
+      {locationNameError && (
+        <p className="text-red-500 text-xs mt-1">{locationNameError}</p>
+      )}
+      <p className="text-gray-500 text-xs mt-1">
+        Character Limit: { location_name.length} / 255
+      </p>
+    </div>
 
-          <div className="mb-4">
-            <label
-              htmlFor="description"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Description
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              rows="4"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className={`mt-1 p-2 border rounded-md w-full ${
-                descriptionError ? "border-red-500" : "border-gray-300"
-              }`}
-            ></textarea>
-            {descriptionError && (
-              <p className="text-red-500 text-xs mt-1">{descriptionError}</p>
-            )}
-          </div>
+    <div className="mb-4">
+      <label
+        htmlFor="description"
+        className="block text-sm font-medium text-gray-600"
+      >
+        Description
+      </label>
+      <textarea
+        id="description"
+        name="description"
+        rows="4"
+        value={description}
+        onChange={handleDescriptionChange}
+        className={`mt-1 p-2 border rounded-md w-full ${
+          descriptionError ? 'border-red-500' : 'border-gray-300'
+        }`}
+      ></textarea>
+      {descriptionError && (
+        <p className="text-red-500 text-xs mt-1">{descriptionError}</p>
+      )}
+      <p className="text-gray-500 text-xs mt-1">
+        Character Limit: { description.length} / 255
+      </p>
+    </div>
 
           <div className="mb-4">
             <label
