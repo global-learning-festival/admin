@@ -193,7 +193,7 @@ const AddProgramPage = () => {
         </div>
       ) : (
         <div className="max-w-2xl mx-auto mt-8 p-4">
-          <h1 className="text-2xl font-bold mb-4">Add Program</h1>
+          <h1 className="text-2xl font-bold mb-4">Add Events</h1>
 
            {/* Title */}
               <div className="mb-4">
