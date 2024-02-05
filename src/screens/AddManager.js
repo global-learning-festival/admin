@@ -71,7 +71,7 @@ const AddManagerScreen = () => {
       setLoading(true);
 
       // Send a POST request to the API to add a new manager
-      const response = await axios.post(`${serverlessapi}/addadmin`, {
+      const response = await axios.post(`${serverlessapi}/register`, {
         username,
         password,
         type,
