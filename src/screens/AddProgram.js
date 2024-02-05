@@ -47,7 +47,7 @@ const AddProgramPage = () => {
   };
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      
       let token = localStorage.getItem("token");
 
       await axios({
