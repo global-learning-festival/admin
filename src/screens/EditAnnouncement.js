@@ -131,7 +131,7 @@ const EditAnnouncement = () => {
       setLoading(true);
 
       const response = await axios.put(
-        `${localhostapi}/announcements/${announcementid}`,
+        `${serverlessapi}/announcements/${announcementid}`,
         {
           title,
           description,
