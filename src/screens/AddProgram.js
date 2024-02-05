@@ -32,7 +32,8 @@ const AddProgramPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const localhostapi= "http://localhost:5000"
-  const serverlessapi = "https://fyp-9bxz.onrender.com";
+  const serverlessapi = "https://adminilftest.onrender.com";
+
 
   const cld = new Cloudinary({
     cloud: {
@@ -54,7 +55,7 @@ const AddProgramPage = () => {
           authorization: "Bearer " + token,
         },
         method: "get",
-        url: `${localhostapi}/validateLogin`,
+        url: `${serverlessapi}/validateLogin`,
       })
         .then(function (response) {
           console.log(response);
@@ -160,6 +161,28 @@ const AddProgramPage = () => {
 
     return isValid;
   };
+
+  const handleTitleChange = (e) => {
+    const inputValue = e.target.value;
+
+    if (inputValue.length <= 255) {
+      setTitle(inputValue);
+      setTitleError('');
+    } else {
+      setTitleError('Title must be 255 characters or less');
+    }
+  };
+
+  const handleDescriptionChange = (e) => {
+    const inputValue = e.target.value;
+
+    if (inputValue.length <= 255) {
+      setDescription(inputValue);
+      setDescriptionError('');
+    } else {
+      setDescriptionError('Description must be 255 characters or less');
+    }
+  };
   return (
     <div>
       {loading ? (
@@ -171,24 +194,27 @@ const AddProgramPage = () => {
           <h1 className="text-2xl font-bold mb-4">Add Program</h1>
 
           <div id="form" className="mb-4">
-            <label
-              htmlFor="title"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Title
-            </label>
-            <input
-              type="text"
-              id="title"
-              value={title}
-              className={`mt-1 p-2 w-full border ${
-                titleError ? "border-red-500" : "border-gray-300"
-              } rounded-md`}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-            {titleError && (
-              <p className="text-red-500 text-xs mt-1">{titleError}</p>
-            )}
+          <label
+        htmlFor="title"
+        className="block text-sm font-medium text-gray-600"
+      >
+        Title
+      </label>
+      <input
+        type="text"
+        id="title"
+        value={title}
+        className={`mt-1 p-2 w-full border ${
+          titleError ? 'border-red-500' : 'border-gray-300'
+        } rounded-md`}
+        onChange={handleTitleChange}
+      />
+      {titleError && (
+        <p className="text-red-500 text-xs mt-1">{titleError}</p>
+      )}
+      <p className="text-gray-500 text-xs mt-1">
+        Character Limit: { title.length} / 255
+      </p>
           </div>
           <div className="mb-4">
             <label
@@ -298,24 +324,27 @@ const AddProgramPage = () => {
           </div>
 
           <div className="mb-4">
-            <label
-              htmlFor="description"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Description
-            </label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className={`mt-1 p-2 w-full border ${
-                descriptionError ? "border-red-500" : "border-gray-300"
-              } rounded-md`}
-            ></textarea>
-            {descriptionError && (
-              <p className="text-red-500 text-xs mt-1">{descriptionError}</p>
-            )}
-          </div>
+      <label
+        htmlFor="description"
+        className="block text-sm font-medium text-gray-600"
+      >
+        Description
+      </label>
+      <textarea
+        id="description"
+        value={description}
+        onChange={handleDescriptionChange}
+        className={`mt-1 p-2 w-full border ${
+          descriptionError ? 'border-red-500' : 'border-gray-300'
+        } rounded-md`}
+      ></textarea>
+      {descriptionError && (
+        <p className="text-red-500 text-xs mt-1">{descriptionError}</p>
+      )}
+      <p className="text-gray-500 text-xs mt-1">
+        Character Limit: {description.length} / 255
+      </p>
+    </div>
 
           <div className="mb-4">
             <label
