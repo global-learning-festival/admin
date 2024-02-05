@@ -9,8 +9,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.5",
-    "bootstrap": "^5.3.2",
-    "bootstrap-icons": "^1.11.3",
+  
     "cloudinary": "^1.41.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
