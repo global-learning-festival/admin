@@ -32,7 +32,8 @@ const AddProgramPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const localhostapi= "http://localhost:5000"
-  const serverlessapi = "https://fyp-9bxz.onrender.com";
+  const serverlessapi = "https://adminilftest.onrender.com";
+
 
   const cld = new Cloudinary({
     cloud: {
@@ -54,7 +55,7 @@ const AddProgramPage = () => {
           authorization: "Bearer " + token,
         },
         method: "get",
-        url: `${localhostapi}/validateLogin`,
+        url: `${serverlessapi}/validateLogin`,
       })
         .then(function (response) {
           console.log(response);
