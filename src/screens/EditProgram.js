@@ -428,14 +428,14 @@ const EditProgram = () => {
                 onClick={handleEdit}
                 className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
               >
-                Edit Program
+                Edit Events
               </button>
             </div>
             <button
               onClick={handleDelete}
               className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
             >
-              Delete Information
+              Delete Events
             </button>
             <NotificationContainer />
           </div>

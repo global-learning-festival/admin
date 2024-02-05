@@ -1,7 +1,6 @@
 import React from 'react';
 import {Cloudinary} from "@cloudinary/url-gen";
 
-import 'bootstrap/dist/css/bootstrap.css';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './screens/Home';
