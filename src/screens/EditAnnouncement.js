@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/App.css";
 import { useParams, useNavigate } from "react-router-dom";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
 import CloudinaryUploadWidget from "../components/CloudinaryUpload";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
@@ -126,7 +131,7 @@ const EditAnnouncement = () => {
       setLoading(true);
 
       const response = await axios.put(
-        `${serverlessapi}/announcements/${announcementid}`,
+        `${localhostapi}/announcements/${announcementid}`,
         {
           title,
           description,
@@ -135,9 +140,22 @@ const EditAnnouncement = () => {
         }
       );
       console.log("API Response:", response.data);
+
+      // Show success notification
+      NotificationManager.success(
+        "Announcement updated successfully",
+        "Success"
+      );
+
       return navigate("/viewannouncements");
     } catch (error) {
       console.error("Error updating information:", error);
+
+      // Show error notification
+      NotificationManager.error(
+        "Error updating announcement information",
+        "Error"
+      );
     }
   };
 
@@ -147,9 +165,22 @@ const EditAnnouncement = () => {
         `${serverlessapi}/announcements/${announcementid}`
       );
       console.log("API Response:", response.data);
+
+      // Show success notification
+      NotificationManager.success(
+        "Announcement deleted successfully",
+        "Success"
+      );
+
       return navigate("/viewannouncements");
     } catch (error) {
       console.error("Error deleting information:", error);
+
+      // Show error notification
+      NotificationManager.error(
+        "Error deleting announcement information",
+        "Error"
+      );
     }
   };
 
@@ -188,20 +219,8 @@ const EditAnnouncement = () => {
             className="container mx-auto p-4"
             key={announcementlist.announcementid}
           >
-            <div style={{ width: "800px" }}>
-              <CloudinaryUploadWidget
-                uwConfig={uwConfig}
-                setPublicId={setPublicId}
-              />
-
-              <AdvancedImage
-                style={{ maxWidth: "100%" }}
-                cldImg={cld.image(publicId)}
-                plugins={[responsive(), placeholder()]}
-              />
-            </div>
-            <h1 className="text-2xl font-bold mb-4">Edit Announcements</h1>
-            <form onSubmit={handleEdit}>
+            <h1 className="text-2xl font-bold mb-4">Edit Announcement</h1>
+            <div id="form" className="mb-4" >
             <div className="mb-4">
       <label
         htmlFor="title"
@@ -270,26 +289,41 @@ const EditAnnouncement = () => {
                   </option>
                 ))}
               </select>
+              <div style={{ width: "200px" }}>
+              <CloudinaryUploadWidget
+                uwConfig={uwConfig}
+                setPublicId={setPublicId}
+              />
+
+              <AdvancedImage
+                style={{ maxWidth: "100%" }}
+                cldImg={cld.image(publicId)}
+                plugins={[responsive(), placeholder()]}
+              />
+            </div>
               <button
+              onClick={handleEdit}
                 type="submit"
                 className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
                 style={{ width: "18%" }}
               >
-                Save Announcement
+                Edit Announcement
               </button>
-            </form>
+            </div>
             <button
               className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
               onClick={handleDelete}
               style={{ width: "18%" }}
             >
-              Delete Information
+              Delete Announcement
             </button>
           </div>
         ))
       )}
 
-      {}
+      {}<NotificationContainer
+            style={{ bottom: "0", right: "0", left: "0", top: "auto" }}
+          />
     </div>
   );
 };

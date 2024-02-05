@@ -3,10 +3,15 @@ import CloudinaryUploadWidget from "../components/CloudinaryUpload";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { AdvancedImage, responsive, placeholder } from "@cloudinary/react";
 import axios from "axios";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
 import { useNavigate } from "react-router-dom";
 import "../styles/App.css";
 
-export default function App() {
+ const AddAnnouncement = () =>{
   const [publicId, setPublicId] = useState("");
   const [cloudName] = useState("dxkozpx6g");
   const [uploadPreset] = useState("jcck4okm");
@@ -107,15 +112,14 @@ export default function App() {
   };
 
   const handleAdd = async (e) => {
-    e.preventDefault();
-
+    e.preventDefault(); // Prevent the default form submission behavior
+  
     if (!validateInput()) {
       // If input is not valid, stop the function
       return;
     }
-
+  
     try {
-      console.log(publicId);
       const response = await axios.post(`${serverlessapi}/announcement`, {
         title,
         description,
@@ -123,11 +127,15 @@ export default function App() {
         event,
       });
       console.log("API Response:", response.data);
+      NotificationManager.success("Announcement added successfully", "Success");
       return navigate("/viewannouncements");
     } catch (error) {
-      console.error("Error updating information:", error);
+      console.error("Error adding announcement:", error);
+      NotificationManager.error("Failed to add announcement", "Error");
     }
   };
+
+  
 
   const handleTitleChange = (e) => {
     const inputValue = e.target.value;
@@ -160,19 +168,9 @@ export default function App() {
         </div>
       ) : (
         <div className="container mx-auto p-4">
-          <CloudinaryUploadWidget
-            uwConfig={uwConfig}
-            setPublicId={setPublicId}
-          />
-          <div style={{ maxWidth: "800px" }}>
-            <AdvancedImage
-              style={{ maxWidth: "100%" }}
-              cldImg={myImage}
-              plugins={[responsive(), placeholder()]}
-            />
-          </div>
-          <form onSubmit={handleAdd}>
-          <div className="mb-4">
+          <h1 className="text-2xl font-bold mb-4">Add Announcement</h1>
+          <div id="form" className="mb-4">
+          
       <label
         htmlFor="title"
         className="block text-sm font-medium text-gray-600"
@@ -244,23 +242,38 @@ export default function App() {
                   </option>
                 ))}
               </select>
-            </div>
+            </div><CloudinaryUploadWidget
+            uwConfig={uwConfig}
+            setPublicId={setPublicId}
+          />
+          <div style={{ maxWidth: "400px" }}>
             <label
               htmlFor="imageupload"
               className="block text-sm font-medium text-gray-600"
             >
-              Image
+              Preview Image
             </label>
-
+            <AdvancedImage
+              style={{ maxWidth: "100%" }}
+              cldImg={myImage}
+              plugins={[responsive(), placeholder()]}
+            />
+          </div>
+          
             <button
+            onClick={handleAdd}
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
             >
               Add Announcement
             </button>
-          </form>
-        </div>
-      )}
+            </div>
+            
+      )}<NotificationContainer
+            style={{ bottom: "0", right: "0", left: "0", top: "auto" }}
+          />
     </div>
   );
-}
+};
+
+export default AddAnnouncement;
