@@ -152,22 +152,22 @@ const AddImportantInformation = () => {
   const handleSubtitleChange = (e) => {
     const inputValue = e.target.value;
 
-    if (inputValue.length <= 255) {
+    if (inputValue.length <= 100) {
       setSubtitle(inputValue);
       setSubtitleError('');
     } else {
-      setSubtitleError('Subtitle must be 255 characters or less');
+      setSubtitleError('Subtitle must be 100 characters or less');
     }
   };
 
   const handleDescriptionChange = (e) => {
     const inputValue = e.target.value;
 
-    if (inputValue.length <= 999) {
+    if (inputValue.length <= 499) {
       setDescription(inputValue);
       setDescriptionError('');
     } else {
-      setDescriptionError('Description must be 999 characters or less');
+      setDescriptionError('Description must be 499 characters or less');
     }
   };
 
@@ -227,7 +227,7 @@ const AddImportantInformation = () => {
         <p className="text-red-500 text-xs mt-1">{subtitleError}</p>
       )}
       <p className="text-gray-500 text-xs mt-1">
-        Character Limit: { subtitle.length} / 255
+        Character Limit: { subtitle.length} / 100
       </p>
     </div>
 
@@ -252,7 +252,7 @@ const AddImportantInformation = () => {
         <p className="text-red-500 text-xs mt-1">{descriptionError}</p>
       )}
       <p className="text-gray-500 text-xs mt-1">
-        Character Limit: { description.length} / 999
+        Character Limit: { description.length} / 499
       </p>
     </div>
 
