@@ -8,7 +8,7 @@ const AdminLoginScreen = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const localhostapi= "http://localhost:5000"
-  const serverlessapi = "https://adminilftest.onrender.com";
+  const serverlessapi = "https://adminilftest-4tmd.onrender.com";
   const navigate = useNavigate();
 
   const handleLogin = async () => {

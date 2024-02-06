@@ -40,7 +40,7 @@ const AdminMapedit = () => {
   const [uploadPreset] = useState("jcck4okm");
   const [loading, setLoading] = useState(false);
   const localhostapi= "http://localhost:5000"
-  const serverlessapi = "https://adminilftest.onrender.com";
+  const serverlessapi = "https://adminilftest-4tmd.onrender.com";
 
   const uwConfig = {
     cloudName,

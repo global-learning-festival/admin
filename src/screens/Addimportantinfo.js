@@ -25,7 +25,7 @@ const AddImportantInformation = () => {
   const navigate = useNavigate();
 
   const localhostapi= "http://localhost:5000"
-  const serverlessapi = "https://adminilftest.onrender.com";
+  const serverlessapi = "https://adminilftest-4tmd.onrender.com";
   useEffect(() => {
     const fetchData = async () => {
       let token = localStorage.getItem("token");
