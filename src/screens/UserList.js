@@ -31,6 +31,8 @@ const UserList = () => {
             if (response.data.message == "Unauthorized access") {
               localStorage.clear();
               navigate('/login')
+            } else if (response.data.role !== "Admin") {
+              navigate("../");
             }
           })
           .catch(function (response) {

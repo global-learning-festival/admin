@@ -33,7 +33,7 @@ const AddManagerScreen = () => {
             localStorage.clear();
             navigate('/login')
           } else if (response.data.role !== "Admin") {
-            navigate("../userlist");
+            navigate("../");
           }
         })
         .catch(function (response) {
