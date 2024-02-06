@@ -176,11 +176,11 @@ const AddProgramPage = () => {
   const handleDescriptionChange = (e) => {
     const inputValue = e.target.value;
 
-    if (inputValue.length <= 255) {
+    if (inputValue.length <= 1000) {
       setDescription(inputValue);
       setDescriptionError('');
     } else {
-      setDescriptionError('Description must be 255 characters or less');
+      setDescriptionError('Description must be 1000 characters or less');
     }
   };
   return (
@@ -342,7 +342,7 @@ const AddProgramPage = () => {
         <p className="text-red-500 text-xs mt-1">{descriptionError}</p>
       )}
       <p className="text-gray-500 text-xs mt-1">
-        Character Limit: {description.length} / 255
+        Character Limit: {description.length} / 1000
       </p>
     </div>
 
