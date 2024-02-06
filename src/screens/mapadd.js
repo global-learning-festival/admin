@@ -6,8 +6,6 @@ import {
   Marker,
   useMapEvents,
 } from "react-leaflet";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import L from "leaflet";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
@@ -191,9 +189,7 @@ const AdminMap = () => {
 
       console.log("Added marker:", response.data);
 
-      toast.success("Marker added successfully", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+    
 
       setLocation("");
       setDescription("");
@@ -203,9 +199,7 @@ const AdminMap = () => {
     } catch (error) {
       console.error("Error adding Marker:", error);
 
-      toast.error("Error adding Marker. Please try again.", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+     
     }
   };
 
