@@ -34,6 +34,8 @@ const AdminLoginScreen = () => {
       navigate("/");
     } catch (error) {
       console.error("Error logging in:", error);
+      localStorage.clear()
+      navigate("../login");
     }
   };
 
