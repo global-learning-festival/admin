@@ -7,7 +7,6 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import L from "leaflet";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
@@ -47,7 +46,7 @@ const AdminMap = () => {
   const [publicId, setPublicId] = useState("");
   const [loading, setLoading] = useState(false);
   const localhostapi= "http://localhost:5000"
-  const serverlessapi = "https://adminilftest-4tmd.onrender.com";
+  const serverlessapi = "https://adminilftest.onrender.com";
 
   const [uwConfig] = useState({
     cloudName,
