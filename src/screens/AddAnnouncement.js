@@ -229,8 +229,9 @@ import "../styles/App.css";
               <select
                 id="eventlist"
                 name="eventlist"
+                placeholder="No Event"
                 value={event}
-                defaultValue={{ label: "No Event", value: null }}
+     
                 onChange={(e) => {
                   console.log('Selected Event:', e.target.value);
                   setEvent(e.target.value);
@@ -242,9 +243,7 @@ import "../styles/App.css";
                     {eventlisting.title}
                   </option>
                 ))}
-                <option value = {null} id>
-                    No event
-                </option>
+
               </select>
             </div><CloudinaryUploadWidget
             uwConfig={uwConfig}
