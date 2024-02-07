@@ -241,6 +241,9 @@ import "../styles/App.css";
                     {eventlisting.title}
                   </option>
                 ))}
+                <option value = {null} selected>
+                    No event
+                </option>
               </select>
             </div><CloudinaryUploadWidget
             uwConfig={uwConfig}
