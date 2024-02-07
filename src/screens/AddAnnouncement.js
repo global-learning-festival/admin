@@ -230,6 +230,7 @@ import "../styles/App.css";
                 id="eventlist"
                 name="eventlist"
                 value={event}
+                defaultValue={{ label: "No Event", value: null }}
                 onChange={(e) => {
                   console.log('Selected Event:', e.target.value);
                   setEvent(e.target.value);
@@ -241,7 +242,7 @@ import "../styles/App.css";
                     {eventlisting.title}
                   </option>
                 ))}
-                <option value = {null} selected>
+                <option value = {null} id>
                     No event
                 </option>
               </select>
