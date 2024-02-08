@@ -131,10 +131,7 @@ const AdminMapedit = () => {
         return;
       }
 
-      if (!category) {
-        setCategoryError("Category is required");
-        return;
-      }
+     
       const response = await axios.put(
         `${serverlessapi}/marker/${markerid}`,
         {
