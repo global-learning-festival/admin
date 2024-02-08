@@ -287,7 +287,7 @@ const AdminMap = () => {
                 icon={customIcon}
               >
                 <Popup>
-                  <div id={`divRefill${markerlocation.mapid}`}>
+                  <div id={`divRefill${markerlocation.mapid}`}  style={{ maxWidth: '300px', wordWrap: 'break-word' }}> 
                     <h3 id={`Refill${markerlocation.mapid}`}>
                       {markerlocation.location_name}
                     </h3>
@@ -301,6 +301,7 @@ const AdminMap = () => {
                     <p>{markerlocation.description}</p>
                     <button
                       id="RefillButton"
+                      style={{ maxWidth: '100%', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
                       onClick={() =>
                         handleEditInformationClick(markerlocation.mapid)
                       }
