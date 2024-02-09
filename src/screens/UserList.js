@@ -58,7 +58,9 @@ const UserList = () => {
         setUsers(usersResponse.data);
 
         // Fetch most saved event data
-        const mostSavedEventResponse = await axios.get(`${serverlessapi}/mostsavedEvent`);
+        const mostSavedEventResponse = await axios.get(
+          `${serverlessapi}/mostsavedEvent`
+        );
         setMostSavedEvent(mostSavedEventResponse.data.rows[0]);
         console.log("Most saved event:", mostSavedEventResponse.data);
       } catch (error) {
@@ -72,7 +74,9 @@ const UserList = () => {
 
   const deleteadmin = async (roleId) => {
     try {
-      const response = await axios.delete(`${serverlessapi}/deladmin/${roleId}`);
+      const response = await axios.delete(
+        `${serverlessapi}/deladmin/${roleId}`
+      );
       console.log("API Response:", response.data);
       window.location.reload();
     } catch (error) {
