@@ -46,7 +46,7 @@ const Announcement = ({
 const AnnouncementList = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(false);
-  const localhostapi= "http://localhost:5000"
+  const localhostapi = "http://localhost:5000";
   const serverlessapi = "https://adminilftest-4tmd.onrender.com";
 
   const navigate = useNavigate();
@@ -67,7 +67,7 @@ const AnnouncementList = () => {
             console.log(response);
             if (response.data.message == "Unauthorized access") {
               localStorage.clear();
-              navigate('/login')
+              navigate("/login");
             }
           })
           .catch(function (response) {
