@@ -288,7 +288,7 @@ const AdminMap = () => {
               >
                 <Popup>
                   <div id={`divRefill${markerlocation.mapid}`}  style={{ maxWidth: '300px', wordWrap: 'break-word' }}> 
-                    <h3 id={`Refill${markerlocation.mapid}`}>
+                    <h3 style={{ fontSize: "25px" }} id={`Refill${markerlocation.mapid}`}>
                       {markerlocation.location_name}
                     </h3>
                     <div style={{ width: "300px" }}>
