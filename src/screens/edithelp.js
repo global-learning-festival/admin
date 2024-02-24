@@ -72,7 +72,7 @@ const EditHelpInformation = () => {
             console.dir(response);
           });
         const response = await axios.get(
-          `${localhostapi}/helpinfos/${helpid}`
+          `${serverlessapi}/helpinfos/${helpid}`
         );
 
         // Check if the response data is an array and set infodata accordingly
@@ -127,7 +127,7 @@ const EditHelpInformation = () => {
       setLoading(true);
 
       const response = await axios.put(
-        `${localhostapi}/helpinfo/${helpid}`,
+        `${serverlessapi}/helpinfo/${helpid}`,
         {
           title,
           subtitle,
@@ -154,7 +154,7 @@ const EditHelpInformation = () => {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `${localhostapi}/delhelpinfo/${helpid}`
+        `${serverlessapi}/delhelpinfo/${helpid}`
       );
       console.log("API Response:", response.data);
 

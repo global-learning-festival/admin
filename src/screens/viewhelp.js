@@ -53,7 +53,7 @@ const HelpInfoList = () => {
             console.dir(response);
           });
         const response = await axios.get(
-          `${localhostapi}/helpinfos`
+          `${serverlessapi}/helpinfos`
         );
         setHelpInformation(response.data);
         setLoading(false);
