@@ -15,6 +15,9 @@ import AdminMap from './screens/mapadd';
 import ViewAnnouncements from './screens/ViewAnnouncement'
 import EditAnnouncement from './screens/EditAnnouncement'
 import AddAnnouncement from './screens/AddAnnouncement'
+import Helplist from './screens/viewhelp'
+import EditHelpInformation from './screens/edithelp';
+import AddHelpInformation from './screens/addhelp';
 
 
 import UserList from './screens/UserList';
@@ -46,6 +49,9 @@ class App extends React.Component {
             <Route path="/mapadding" element={<AdminMap />} />
             <Route path="/mapediting/:markerid" element={<AdminMapedit />} />
             <Route path="/userlist" element={<UserList />} />
+            <Route path="/viewhelp" element={<Helplist />} />
+            <Route path="/edithelp/:helpid" element={<EditHelpInformation />} />
+            <Route path="/addhelp" element={<AddHelpInformation />} />
           </Routes>
        
 
