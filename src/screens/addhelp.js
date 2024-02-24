@@ -107,7 +107,7 @@ const AddHelpInformation = () => {
 
       // Send a POST request to your API endpoint to add information
       const response = await axios.post(
-        `${localhostapi}/helpinfo`,
+        `${serverlessapi}/helpinfo`,
         {
           title,
           subtitle,
